@@ -34,8 +34,8 @@ STUDIO_CSS = """
     background: radial-gradient(ellipse 80% 55% at 50% 40%, rgba(212,175,55,0.12) 0%, transparent 70%);
     pointer-events: none;
 }
-.studio-hero h1 { color: #F0CC55; font-size: 2.4rem; margin: 0; position: relative; letter-spacing: -0.01em; }
-.studio-hero .sub { color: #A08060; margin: 0.5rem 0 0; font-size: 0.92rem; position: relative; }
+.studio-hero h1 { color: #F5D060; font-size: 2.4rem; margin: 0; position: relative; letter-spacing: -0.01em; }
+.studio-hero .sub { color: #C8A870; margin: 0.5rem 0 0; font-size: 0.92rem; position: relative; }
 .studio-hero .version-badge {
     display: inline-block; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.40);
     color: #F0CC55; padding: 0.25rem 1rem; border-radius: 999px; font-size: 0.72rem; font-weight: 800;
@@ -52,15 +52,15 @@ STUDIO_CSS = """
     box-shadow: 0 0 24px rgba(212,175,55,0.15);
 }
 .mode-card .icon { font-size: 2.4rem; display: block; margin-bottom: 0.6rem; }
-.mode-card .title { color: #F0CC55; font-size: 1.05rem; font-weight: 900; }
-.mode-card .desc { color: #906840; font-size: 0.8rem; margin-top: 0.35rem; line-height: 1.5; }
+.mode-card .title { color: #F5D060; font-size: 1.05rem; font-weight: 900; }
+.mode-card .desc { color: #C09060; font-size: 0.8rem; margin-top: 0.35rem; line-height: 1.5; }
 
 .analysis-card {
     background: linear-gradient(135deg, #100800, #1A0E04);
     border: 1px solid rgba(212,175,55,0.35); border-radius: 1rem; padding: 1.4rem;
 }
-.analysis-card .brand { color: #F0CC55; font-size: 1.5rem; font-weight: 900; }
-.analysis-card .name { color: #F0E0C0; font-size: 1.05rem; font-weight: 700; }
+.analysis-card .brand { color: #F5D060; font-size: 1.5rem; font-weight: 900; }
+.analysis-card .name { color: #F5EAD0; font-size: 1.05rem; font-weight: 700; }
 .analysis-card .tag {
     display: inline-block; background: rgba(212,175,55,0.12);
     border: 1px solid rgba(212,175,55,0.30); color: #DDB840;
@@ -76,7 +76,7 @@ STUDIO_CSS = """
     background: #100A04; border: 1px solid rgba(212,175,55,0.22);
     border-radius: 1rem; padding: 1.6rem; margin-bottom: 1rem;
 }
-.result-section h3 { color: #F0CC55; font-size: 1.08rem; margin: 0 0 1rem; font-weight: 900; }
+.result-section h3 { color: #F5D060; font-size: 1.08rem; margin: 0 0 1rem; font-weight: 900; }
 
 .caption-block {
     background: #0A0600; border: 1px solid rgba(212,175,55,0.18);
@@ -86,7 +86,7 @@ STUDIO_CSS = """
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 0.5rem;
 }
-.caption-title { color: #F0CC55; font-size: 0.88rem; font-weight: 800; }
+.caption-title { color: #F5D060; font-size: 0.88rem; font-weight: 800; }
 
 .hashtag-pill {
     display: inline-block; background: rgba(212,175,55,0.10);
@@ -123,9 +123,9 @@ STUDIO_CSS = """
 }
 
 .warning-box {
-    background: rgba(251,191,36,0.08); border: 1.5px solid rgba(251,191,36,0.35);
+    background: rgba(251,191,36,0.10); border: 1.5px solid rgba(251,191,36,0.45);
     border-radius: 0.7rem; padding: 0.85rem; margin-bottom: 0.6rem;
-    color: #FFD060; font-size: 0.85rem; font-weight: 600;
+    color: #FFE080; font-size: 0.85rem; font-weight: 700;
 }
 
 .service-card {
@@ -786,44 +786,41 @@ def show_studio_page():
     st.markdown("---")
     st.markdown('<div class="step-badge">⑤ اختر المحتوى المطلوب</div>', unsafe_allow_html=True)
 
+    # ── الخيارات الأساسية (مرئية دائماً) ──
     st.markdown("""
-    <div style='background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.15);
-         border-radius:0.75rem; padding:1rem 1.2rem; margin-bottom:1rem;'>
-      <div style='color:#F0CC55; font-size:0.88rem; font-weight:900; margin-bottom:0.6rem;'>🎯 المحتوى البصري</div>
+    <div style='background:rgba(212,175,55,0.06); border:1px solid rgba(212,175,55,0.20);
+         border-radius:0.75rem; padding:0.9rem 1.2rem; margin-bottom:0.8rem;'>
+      <div style='color:#F5D060; font-size:0.9rem; font-weight:900; margin-bottom:0.5rem;'>🎯 المحتوى الأساسي</div>
     </div>
     """, unsafe_allow_html=True)
 
-    oc1, oc2, oc3 = st.columns(3)
-    with oc1:
+    bc1, bc2, bc3 = st.columns(3)
+    with bc1:
         opt_images   = st.checkbox("🖼️ صور لكل منصة", value=True,
                                     help="يتطلب GEMINI_API_KEY" if not has_gemini else "Imagen 3.0 — أعلى جودة")
-        opt_scenario = st.checkbox("🎬 سيناريو فيديو تيك توك", value=False)
-        opt_video    = st.checkbox("🎥 فيديو Luma AI", value=False,
-                                    help="يتطلب LUMA_API_KEY")
-    with oc2:
-        opt_captions = st.checkbox("📝 تعليقات جميع المنصات (12)", value=True)
-        opt_desc     = st.checkbox("📄 5 أوصاف تسويقية", value=True)
-        opt_story    = st.checkbox("📖 قصة عطرية إبداعية", value=False)
-    with oc3:
-        opt_hashtags = st.checkbox("🏷️ 45 هاشتاق (عربي + إنجليزي)", value=True)
-        opt_weekly   = st.checkbox("📅 خطة نشر أسبوعية", value=False,
-                                    help="جدول محتوى 7 أيام لكل المنصات")
-        opt_email    = st.checkbox("📧 نص بريد إلكتروني تسويقي", value=False)
+    with bc2:
+        opt_captions = st.checkbox("📝 تعليقات المنصات", value=True)
+    with bc3:
+        opt_hashtags = st.checkbox("🏷️ 45 هاشتاق", value=True)
 
-    st.markdown("""
-    <div style='background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.15);
-         border-radius:0.75rem; padding:0.7rem 1.2rem; margin:0.8rem 0 0.5rem;'>
-      <div style='color:#F0CC55; font-size:0.88rem; font-weight:900;'>⚙️ النشر والمتابعة</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    pub1, pub2 = st.columns(2)
-    with pub1:
-        opt_publish  = st.checkbox("🚀 نشر تلقائي عبر Make.com", value=False,
-                                    help="يتطلب WEBHOOK_PUBLISH_CONTENT")
-    with pub2:
-        opt_ad_copy  = st.checkbox("📣 نص إعلان مدفوع (Meta/TikTok)", value=False,
-                                    help="نص إعلاني جاهز للحملات المدفوعة")
+    # ── خيارات متقدمة (مطوية افتراضياً) ──
+    with st.expander("⚙️ خيارات متقدمة — نصوص · فيديو · نشر", expanded=False):
+        oc1, oc2 = st.columns(2)
+        with oc1:
+            opt_desc     = st.checkbox("📄 5 أوصاف تسويقية", value=True)
+            opt_scenario = st.checkbox("🎬 سيناريو فيديو تيك توك", value=False)
+            opt_story    = st.checkbox("📖 قصة عطرية إبداعية", value=False)
+        with oc2:
+            opt_weekly   = st.checkbox("📅 خطة نشر أسبوعية", value=False)
+            opt_email    = st.checkbox("📧 بريد إلكتروني تسويقي", value=False)
+            opt_ad_copy  = st.checkbox("📣 نص إعلان مدفوع", value=False)
+        pub_col, vid_col = st.columns(2)
+        with pub_col:
+            opt_publish  = st.checkbox("🚀 نشر تلقائي عبر Make.com", value=False,
+                                        help="يتطلب WEBHOOK_PUBLISH_CONTENT")
+        with vid_col:
+            opt_video    = st.checkbox("🎥 فيديو Luma AI", value=False,
+                                        help="يتطلب LUMA_API_KEY")
 
     if opt_scenario:
         scenario_type = st.selectbox("🎬 نوع السيناريو", [

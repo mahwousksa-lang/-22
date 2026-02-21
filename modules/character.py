@@ -81,13 +81,13 @@ def show_character_page():
         border: 1px solid rgba(212,175,55,0.4); border-radius: 1.25rem;
         padding: 2rem; text-align: center; margin-bottom: 2rem;
     }
-    .char-hero h1 { color: #D4AF37; font-size: 2rem; margin: 0; }
-    .char-hero p  { color: #806040; margin: 0.4rem 0 0; font-size: 0.88rem; }
+    .char-hero h1 { color: #F5D060; font-size: 2rem; margin: 0; }
+    .char-hero p  { color: #C8A060; margin: 0.4rem 0 0; font-size: 0.88rem; }
     .dna-box {
         background: #040200; border: 1px solid rgba(212,175,55,0.2);
         border-radius: 0.75rem; padding: 1.1rem;
         font-family: 'Courier New', monospace; font-size: 0.77rem;
-        color: #B8A050; line-height: 1.85; direction: ltr; text-align: left;
+        color: #D4B870; line-height: 1.85; direction: ltr; text-align: left;
         white-space: pre-wrap;
     }
     .rule-chip {
@@ -108,16 +108,16 @@ def show_character_page():
         white-space: pre-wrap; max-height: 400px; overflow-y: auto;
     }
     .reply-card {
-        background: rgba(212,175,55,0.04); border-right: 2px solid #D4AF37;
+        background: rgba(212,175,55,0.06); border-right: 2px solid #F0CC55;
         border-radius: 0.4rem; padding: 0.65rem 0.9rem; margin: 0.3rem 0;
-        color: #F0E0C0; font-style: italic; font-size: 0.88rem; line-height: 1.5;
+        color: #F5EAD0; font-style: italic; font-size: 0.88rem; line-height: 1.5;
     }
     .outfit-card {
         background: #080500; border: 1px solid rgba(212,175,55,0.15);
         border-radius: 0.6rem; padding: 0.9rem; margin-bottom: 0.5rem;
     }
-    .outfit-label { color: #D4AF37; font-weight: 800; font-size: 0.88rem; margin-bottom: 0.3rem; }
-    .outfit-use   { color: #706040; font-size: 0.73rem; margin-bottom: 0.5rem; }
+    .outfit-label { color: #F5D060; font-weight: 800; font-size: 0.88rem; margin-bottom: 0.3rem; }
+    .outfit-use   { color: #B09060; font-size: 0.73rem; margin-bottom: 0.5rem; }
     .scene-card-char {
         background: #060400; border-right: 3px solid #D4AF37;
         border-radius: 0.5rem; padding: 0.8rem; margin-bottom: 0.55rem;
