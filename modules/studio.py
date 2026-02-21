@@ -24,8 +24,8 @@ from modules.ai_engine import (
 STUDIO_CSS = """
 <style>
 .studio-hero {
-    background: linear-gradient(135deg, #0F0900 0%, #201200 50%, #0F0900 100%);
-    border: 1px solid rgba(212,175,55,0.50);
+    background: linear-gradient(135deg, #1A0E02 0%, #2A1A06 50%, #1A0E02 100%);
+    border: 2px solid rgba(212,175,55,0.60);
     border-radius: 1.3rem; padding: 2.8rem 2rem; text-align: center;
     margin-bottom: 2rem; position: relative; overflow: hidden;
 }
@@ -34,11 +34,11 @@ STUDIO_CSS = """
     background: radial-gradient(ellipse 80% 55% at 50% 40%, rgba(212,175,55,0.12) 0%, transparent 70%);
     pointer-events: none;
 }
-.studio-hero h1 { color: #F5D060; font-size: 2.4rem; margin: 0; position: relative; letter-spacing: -0.01em; }
-.studio-hero .sub { color: #C8A870; margin: 0.5rem 0 0; font-size: 0.92rem; position: relative; }
+.studio-hero h1 { color: #FFE060; font-size: 2.4rem; margin: 0; position: relative; letter-spacing: -0.01em; font-weight: 900; }
+.studio-hero .sub { color: #F0C870; margin: 0.5rem 0 0; font-size: 0.95rem; position: relative; font-weight: 700; }
 .studio-hero .version-badge {
-    display: inline-block; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.40);
-    color: #F0CC55; padding: 0.25rem 1rem; border-radius: 999px; font-size: 0.72rem; font-weight: 800;
+    display: inline-block; background: rgba(212,175,55,0.20); border: 1.5px solid rgba(212,175,55,0.55);
+    color: #FFE060; padding: 0.25rem 1rem; border-radius: 999px; font-size: 0.75rem; font-weight: 900;
     letter-spacing: 0.08rem; margin-top: 0.8rem; position: relative;
 }
 
@@ -52,20 +52,20 @@ STUDIO_CSS = """
     box-shadow: 0 0 24px rgba(212,175,55,0.15);
 }
 .mode-card .icon { font-size: 2.4rem; display: block; margin-bottom: 0.6rem; }
-.mode-card .title { color: #F5D060; font-size: 1.05rem; font-weight: 900; }
-.mode-card .desc { color: #C09060; font-size: 0.8rem; margin-top: 0.35rem; line-height: 1.5; }
+.mode-card .title { color: #FFE060; font-size: 1.05rem; font-weight: 900; }
+.mode-card .desc { color: #E0B870; font-size: 0.85rem; margin-top: 0.35rem; line-height: 1.5; font-weight: 600; }
 
 .analysis-card {
-    background: linear-gradient(135deg, #100800, #1A0E04);
-    border: 1px solid rgba(212,175,55,0.35); border-radius: 1rem; padding: 1.4rem;
+    background: linear-gradient(135deg, #1E1006, #281808);
+    border: 2px solid rgba(212,175,55,0.50); border-radius: 1rem; padding: 1.4rem;
 }
-.analysis-card .brand { color: #F5D060; font-size: 1.5rem; font-weight: 900; }
-.analysis-card .name { color: #F5EAD0; font-size: 1.05rem; font-weight: 700; }
+.analysis-card .brand { color: #FFE060; font-size: 1.5rem; font-weight: 900; }
+.analysis-card .name { color: #FFF0D8; font-size: 1.05rem; font-weight: 800; }
 .analysis-card .tag {
-    display: inline-block; background: rgba(212,175,55,0.12);
-    border: 1px solid rgba(212,175,55,0.30); color: #DDB840;
-    padding: 0.18rem 0.6rem; border-radius: 999px; font-size: 0.75rem; margin: 0.15rem;
-    font-weight: 700;
+    display: inline-block; background: rgba(212,175,55,0.18);
+    border: 1.5px solid rgba(212,175,55,0.50); color: #FFD840;
+    padding: 0.2rem 0.7rem; border-radius: 999px; font-size: 0.78rem; margin: 0.15rem;
+    font-weight: 800;
 }
 .analysis-card .color-dot {
     display: inline-block; width: 16px; height: 16px; border-radius: 50%;
@@ -73,30 +73,30 @@ STUDIO_CSS = """
 }
 
 .result-section {
-    background: #100A04; border: 1px solid rgba(212,175,55,0.22);
+    background: #1E1408; border: 1.5px solid rgba(212,175,55,0.35);
     border-radius: 1rem; padding: 1.6rem; margin-bottom: 1rem;
 }
-.result-section h3 { color: #F5D060; font-size: 1.08rem; margin: 0 0 1rem; font-weight: 900; }
+.result-section h3 { color: #FFE060; font-size: 1.1rem; margin: 0 0 1rem; font-weight: 900; }
 
 .caption-block {
-    background: #0A0600; border: 1px solid rgba(212,175,55,0.18);
+    background: #1A1006; border: 1.5px solid rgba(212,175,55,0.30);
     border-radius: 0.8rem; padding: 1rem; margin-bottom: 0.65rem;
 }
 .caption-header {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 0.5rem;
 }
-.caption-title { color: #F5D060; font-size: 0.88rem; font-weight: 800; }
+.caption-title { color: #FFE060; font-size: 0.9rem; font-weight: 900; }
 
 .hashtag-pill {
-    display: inline-block; background: rgba(212,175,55,0.10);
-    border: 1px solid rgba(212,175,55,0.25); color: #C8A040;
-    padding: 0.22rem 0.6rem; border-radius: 999px; font-size: 0.74rem; margin: 0.18rem;
-    font-weight: 700;
+    display: inline-block; background: rgba(212,175,55,0.18);
+    border: 1.5px solid rgba(212,175,55,0.45); color: #FFD040;
+    padding: 0.25rem 0.7rem; border-radius: 999px; font-size: 0.78rem; margin: 0.18rem;
+    font-weight: 800;
 }
 
 .scene-card {
-    background: #0A0700; border-right: 3px solid #D4AF37;
+    background: #1A1206; border-right: 4px solid #FFD840;
     border-radius: 0.6rem; padding: 1rem; margin-bottom: 0.7rem;
 }
 .scene-num {
@@ -108,9 +108,9 @@ STUDIO_CSS = """
 
 .step-badge {
     display: inline-flex; align-items: center; gap: 0.5rem;
-    background: rgba(212,175,55,0.15); border: 1.5px solid rgba(212,175,55,0.40);
-    color: #F0CC55; padding: 0.35rem 1rem; border-radius: 999px;
-    font-size: 0.85rem; font-weight: 900; margin-bottom: 0.8rem;
+    background: rgba(212,175,55,0.20); border: 2px solid rgba(212,175,55,0.60);
+    color: #FFE060; padding: 0.4rem 1.1rem; border-radius: 999px;
+    font-size: 0.9rem; font-weight: 900; margin-bottom: 0.8rem;
     letter-spacing: 0.02rem;
 }
 
@@ -123,9 +123,9 @@ STUDIO_CSS = """
 }
 
 .warning-box {
-    background: rgba(251,191,36,0.10); border: 1.5px solid rgba(251,191,36,0.45);
-    border-radius: 0.7rem; padding: 0.85rem; margin-bottom: 0.6rem;
-    color: #FFE080; font-size: 0.85rem; font-weight: 700;
+    background: rgba(251,191,36,0.15); border: 2px solid rgba(251,191,36,0.65);
+    border-radius: 0.7rem; padding: 0.9rem; margin-bottom: 0.6rem;
+    color: #FFE880; font-size: 0.9rem; font-weight: 800;
 }
 
 .service-card {

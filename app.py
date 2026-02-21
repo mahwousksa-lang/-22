@@ -11,73 +11,102 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ═══ GLOBAL CSS — ألوان محسّنة وقراءة أوضح ═══
+# ═══ GLOBAL CSS — وضوح كامل وتباين عالٍ ═══
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap');
 
+/* ━━━━ Base ━━━━ */
 html, body, [class*="css"] {
     font-family: 'Cairo', sans-serif !important;
     direction: rtl;
+    color: #F0E0C0 !important;
 }
-.stApp {
-    background: #0E0B06;
-}
-/* ━━━━ Main content background ━━━━ */
+.stApp { background: #1A1008; }
+
+/* ━━━━ Main content ━━━━ */
 .main .block-container {
-    background: #100D07;
+    background: #1E1408;
     border-radius: 1rem;
     padding: 1.5rem 2rem !important;
+    max-width: 1100px;
+}
+
+/* ━━━━ كل النصوص العامة ━━━━ */
+p, span, div, li, td, th {
+    color: #F0E0C0 !important;
+    font-family: 'Cairo', sans-serif !important;
+}
+strong, b { color: #FFE080 !important; font-weight: 900 !important; }
+small { color: #D4B880 !important; }
+
+/* ━━━━ Headings ━━━━ */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cairo', sans-serif !important;
+    color: #FFE060 !important;
+    font-weight: 900 !important;
 }
 
 /* ━━━━ Sidebar ━━━━ */
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #0D0902 0%, #160E04 50%, #0D0902 100%) !important;
-    border-left: 1px solid rgba(212,175,55,0.3) !important;
+    background: linear-gradient(180deg, #120A02 0%, #1C1006 50%, #120A02 100%) !important;
+    border-left: 2px solid rgba(212,175,55,0.4) !important;
 }
 [data-testid="stSidebarNav"] { display: none; }
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] div,
+[data-testid="stSidebar"] label {
+    color: #F0D8A0 !important;
+}
 
 /* ━━━━ Buttons — Primary ━━━━ */
 div.stButton > button {
-    background: linear-gradient(135deg, #8A6415 0%, #D4A82A 40%, #F0CC55 55%, #9A6A1A 100%);
-    color: #1A0D00 !important; border: none; border-radius: 0.65rem;
-    font-family: 'Cairo', sans-serif !important; font-weight: 900;
-    font-size: 0.92rem; letter-spacing: 0.02rem;
-    transition: all 0.2s ease; box-shadow: 0 3px 14px rgba(212,175,55,0.25);
-    padding: 0.55rem 1.3rem;
+    background: linear-gradient(135deg, #9A7020 0%, #D4AF37 45%, #FFE060 55%, #A07820 100%) !important;
+    color: #1A0D00 !important;
+    border: none !important;
+    border-radius: 0.65rem !important;
+    font-family: 'Cairo', sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 0.92rem !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 3px 14px rgba(212,175,55,0.30) !important;
+    padding: 0.55rem 1.3rem !important;
 }
 div.stButton > button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 26px rgba(212,175,55,0.40);
-    background: linear-gradient(135deg, #9A7020 0%, #E4B83A 40%, #FFD860 55%, #AA7A20 100%);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 26px rgba(212,175,55,0.50) !important;
+    background: linear-gradient(135deg, #B08030 0%, #E8C040 45%, #FFE870 55%, #B08030 100%) !important;
 }
-div.stButton > button:active { transform: translateY(0); }
 
 /* ━━━━ Buttons — Secondary ━━━━ */
 div.stButton > button[kind="secondary"] {
-    background: rgba(212,175,55,0.10) !important;
-    color: #DDB840 !important;
-    border: 1px solid rgba(212,175,55,0.35) !important;
+    background: rgba(212,175,55,0.15) !important;
+    color: #FFD840 !important;
+    border: 1.5px solid rgba(212,175,55,0.50) !important;
     box-shadow: none !important;
+    font-weight: 700 !important;
 }
 div.stButton > button[kind="secondary"]:hover {
-    background: rgba(212,175,55,0.18) !important;
-    border-color: rgba(212,175,55,0.55) !important;
-    color: #F0CC55 !important;
+    background: rgba(212,175,55,0.25) !important;
+    border-color: rgba(212,175,55,0.75) !important;
+    color: #FFE860 !important;
 }
 
 /* ━━━━ Tabs ━━━━ */
 [data-testid="stTabs"] button[role="tab"] {
     font-family: 'Cairo', sans-serif !important;
-    color: #B09060 !important; font-weight: 600; font-size: 0.88rem;
+    color: #D4A860 !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
 }
 [data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-    color: #F0CC55 !important;
-    border-bottom: 2.5px solid #D4AF37 !important;
+    color: #FFE060 !important;
+    border-bottom: 3px solid #D4AF37 !important;
     font-weight: 900 !important;
 }
 [data-testid="stTabs"] button[role="tab"]:hover {
-    color: #D4AF37 !important;
+    color: #FFD040 !important;
 }
 
 /* ━━━━ Inputs ━━━━ */
@@ -85,142 +114,212 @@ div.stButton > button[kind="secondary"]:hover {
 [data-testid="stTextArea"] textarea,
 [data-testid="stSelectbox"] > div > div,
 [data-testid="stNumberInput"] input {
-    background: #180F04 !important;
-    color: #F5EAD0 !important;
-    border: 1.5px solid rgba(212,175,55,0.35) !important;
+    background: #241808 !important;
+    color: #FFF0D0 !important;
+    border: 2px solid rgba(212,175,55,0.50) !important;
     border-radius: 0.55rem !important;
     font-family: 'Cairo', sans-serif !important;
-    font-size: 0.9rem !important;
+    font-size: 0.92rem !important;
+    font-weight: 600 !important;
 }
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
-    border-color: rgba(212,175,55,0.70) !important;
-    box-shadow: 0 0 0 3px rgba(212,175,55,0.15) !important;
+    border-color: rgba(212,175,55,0.90) !important;
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.20) !important;
+    outline: none !important;
 }
-/* Labels — أوضح كثيراً */
-label, .stSelectbox label, .stTextInput label, .stTextArea label {
-    color: #D4B080 !important;
-    font-size: 0.88rem !important;
+
+/* ━━━━ Labels ━━━━ */
+label,
+.stSelectbox label,
+.stTextInput label,
+.stTextArea label,
+.stNumberInput label,
+.stSlider label,
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] {
+    color: #FFD880 !important;
+    font-size: 0.9rem !important;
+    font-weight: 800 !important;
+    font-family: 'Cairo', sans-serif !important;
+}
+
+/* ━━━━ Selectbox text ━━━━ */
+[data-testid="stSelectbox"] span,
+[data-testid="stSelectbox"] div {
+    color: #FFF0D0 !important;
+    font-weight: 600 !important;
+}
+
+/* ━━━━ Checkboxes & Toggles ━━━━ */
+[data-testid="stCheckbox"] label,
+[data-testid="stCheckbox"] p,
+[data-testid="stCheckbox"] span {
+    color: #FFE090 !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+}
+[data-testid="stToggle"] label,
+[data-testid="stToggle"] p {
+    color: #FFE090 !important;
     font-weight: 700 !important;
 }
 
 /* ━━━━ Metrics ━━━━ */
-[data-testid="stMetricValue"] { color: #F0CC55 !important; font-weight: 900 !important; font-size: 2rem !important; }
-[data-testid="stMetricLabel"] { color: #C0A070 !important; font-weight: 700 !important; }
+[data-testid="stMetricValue"] { color: #FFE060 !important; font-weight: 900 !important; font-size: 2rem !important; }
+[data-testid="stMetricLabel"] { color: #D4B870 !important; font-weight: 800 !important; }
+[data-testid="stMetricDelta"] { font-weight: 700 !important; }
 
 /* ━━━━ Expanders ━━━━ */
-.streamlit-expanderHeader {
-    background: rgba(212,175,55,0.07) !important;
-    border: 1px solid rgba(212,175,55,0.20) !important;
-    border-radius: 0.6rem !important;
-    color: #F0CC55 !important;
+.streamlit-expanderHeader,
+[data-testid="stExpander"] summary,
+[data-testid="stExpander"] > div:first-child {
+    background: rgba(212,175,55,0.12) !important;
+    border: 1.5px solid rgba(212,175,55,0.35) !important;
+    border-radius: 0.65rem !important;
+    color: #FFE060 !important;
     font-family: 'Cairo', sans-serif !important;
-    font-weight: 700 !important;
-    font-size: 0.9rem !important;
+    font-weight: 800 !important;
+    font-size: 0.92rem !important;
+    padding: 0.7rem 1rem !important;
 }
-.streamlit-expanderContent {
-    border: 1px solid rgba(212,175,55,0.12) !important;
+.streamlit-expanderHeader p,
+[data-testid="stExpander"] summary p {
+    color: #FFE060 !important;
+    font-weight: 800 !important;
+}
+.streamlit-expanderContent,
+[data-testid="stExpander"] > div:last-child {
+    border: 1.5px solid rgba(212,175,55,0.20) !important;
     border-top: none !important;
-    background: rgba(14,10,4,0.8) !important;
-    border-radius: 0 0 0.6rem 0.6rem !important;
+    background: rgba(20,12,4,0.95) !important;
+    border-radius: 0 0 0.65rem 0.65rem !important;
+    padding: 1rem !important;
 }
 
 /* ━━━━ Alerts ━━━━ */
-.stSuccess { background: rgba(52,211,153,0.12) !important; border-color: #34d399 !important; border-radius: 0.65rem !important; color: #80FFD8 !important; }
-.stWarning { background: rgba(251,191,36,0.12) !important; border-color: #fbbf24 !important; border-radius: 0.65rem !important; color: #FFD870 !important; }
-.stError   { background: rgba(239,68,68,0.12)  !important; border-color: #ef4444 !important; border-radius: 0.65rem !important; color: #FF9090 !important; }
-.stInfo    { background: rgba(212,175,55,0.10)  !important; border-color: rgba(212,175,55,0.45) !important; border-radius: 0.65rem !important; color: #F0D060 !important; }
-
-/* ━━━━ Checkboxes & Toggles ━━━━ */
-[data-testid="stCheckbox"] label { color: #E0C890 !important; font-size: 0.88rem !important; font-weight: 600 !important; }
-[data-testid="stToggle"] label { color: #E0C890 !important; font-weight: 600 !important; }
+[data-testid="stAlert"],
+.stSuccess, .stWarning, .stError, .stInfo {
+    font-family: 'Cairo', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
+    border-radius: 0.65rem !important;
+}
+.stSuccess { background: rgba(52,211,153,0.15) !important; border-color: #34d399 !important; color: #A0FFE0 !important; }
+.stWarning { background: rgba(251,191,36,0.15) !important; border-color: #fbbf24 !important; color: #FFE070 !important; }
+.stError   { background: rgba(239,68,68,0.15)  !important; border-color: #ef4444 !important; color: #FFB0B0 !important; }
+.stInfo    { background: rgba(212,175,55,0.15)  !important; border-color: rgba(212,175,55,0.60) !important; color: #FFE080 !important; }
+[data-testid="stAlert"] p { color: inherit !important; }
 
 /* ━━━━ Divider ━━━━ */
-hr { border-color: rgba(212,175,55,0.22) !important; margin: 1.2rem 0 !important; }
+hr { border-color: rgba(212,175,55,0.30) !important; margin: 1.2rem 0 !important; }
 
 /* ━━━━ Progress Bar ━━━━ */
 .stProgress > div > div > div {
     background: linear-gradient(90deg, #B09030, #D4AF37, #F5D560, #D4AF37) !important;
     border-radius: 999px !important;
 }
+.stProgress > div > div {
+    background: rgba(212,175,55,0.15) !important;
+    border-radius: 999px !important;
+}
 
 /* ━━━━ File Uploader ━━━━ */
 [data-testid="stFileUploader"] {
-    border: 2px dashed rgba(212,175,55,0.40) !important;
+    border: 2px dashed rgba(212,175,55,0.55) !important;
     border-radius: 0.85rem !important;
-    background: rgba(212,175,55,0.05) !important;
+    background: rgba(212,175,55,0.07) !important;
     padding: 1.2rem !important;
 }
 [data-testid="stFileUploader"]:hover {
-    border-color: rgba(212,175,55,0.65) !important;
-    background: rgba(212,175,55,0.08) !important;
+    border-color: rgba(212,175,55,0.80) !important;
+    background: rgba(212,175,55,0.12) !important;
 }
-[data-testid="stFileUploaderDropzoneInstructions"] { color: #D4B080 !important; }
+[data-testid="stFileUploaderDropzoneInstructions"],
+[data-testid="stFileUploaderDropzoneInstructions"] span,
+[data-testid="stFileUploaderDropzoneInstructions"] small {
+    color: #FFD880 !important;
+    font-weight: 700 !important;
+}
 
 /* ━━━━ Code blocks ━━━━ */
-.stCodeBlock { border-radius: 0.6rem !important; border: 1px solid rgba(212,175,55,0.15) !important; }
-.stCode code { color: #D4F090 !important; }
+.stCodeBlock {
+    border-radius: 0.6rem !important;
+    border: 1.5px solid rgba(212,175,55,0.25) !important;
+}
+.stCodeBlock code, pre code {
+    color: #C8F080 !important;
+    font-size: 0.85rem !important;
+}
 
 /* ━━━━ Download buttons ━━━━ */
 [data-testid="stDownloadButton"] button {
-    background: linear-gradient(135deg, rgba(212,175,55,0.14), rgba(212,175,55,0.20)) !important;
-    color: #F5D060 !important;
-    border: 1.5px solid rgba(212,175,55,0.45) !important;
-    font-size: 0.85rem !important;
-    font-weight: 700 !important;
+    background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.28)) !important;
+    color: #FFE060 !important;
+    border: 2px solid rgba(212,175,55,0.60) !important;
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
     border-radius: 0.55rem !important;
 }
 [data-testid="stDownloadButton"] button:hover {
-    background: linear-gradient(135deg, rgba(212,175,55,0.24), rgba(212,175,55,0.32)) !important;
-    border-color: rgba(212,175,55,0.70) !important;
+    background: linear-gradient(135deg, rgba(212,175,55,0.30), rgba(212,175,55,0.42)) !important;
+    border-color: rgba(212,175,55,0.85) !important;
     transform: translateY(-1px) !important;
+    color: #FFF080 !important;
 }
 
 /* ━━━━ Scrollbar ━━━━ */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: #0E0B06; }
-::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.35); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(212,175,55,0.60); }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #1A1008; }
+::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.45); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(212,175,55,0.70); }
 
-/* ━━━━ Select Slider ━━━━ */
-[data-testid="stSlider"] .st-bq { color: #D4AF37 !important; }
-
-/* ━━━━ Section Headers ━━━━ */
-h1,h2,h3 { font-family: 'Cairo', sans-serif !important; color: #F5D060 !important; }
-p { color: #D0B880 !important; }
-
-/* ━━━━ Sidebar text ━━━━ */
-.sidebar-label { color: #C09060 !important; }
+/* ━━━━ Slider ━━━━ */
+[data-testid="stSlider"] p,
+[data-testid="stSlider"] span {
+    color: #FFD840 !important;
+    font-weight: 700 !important;
+}
 
 /* ━━━━ رابط Gemini ━━━━ */
 .gemini-link {
     display: block;
-    background: linear-gradient(135deg, rgba(66,133,244,0.15), rgba(52,168,83,0.10));
-    border: 1.5px solid rgba(66,133,244,0.40);
+    background: linear-gradient(135deg, rgba(66,133,244,0.20), rgba(52,168,83,0.15));
+    border: 2px solid rgba(66,133,244,0.55);
     border-radius: 0.65rem;
-    padding: 0.6rem 0.9rem;
+    padding: 0.65rem 0.9rem;
     text-align: center;
     text-decoration: none !important;
     margin: 0.4rem 0;
     transition: all 0.2s;
 }
 .gemini-link:hover {
-    background: linear-gradient(135deg, rgba(66,133,244,0.25), rgba(52,168,83,0.18));
-    border-color: rgba(66,133,244,0.65);
+    background: linear-gradient(135deg, rgba(66,133,244,0.32), rgba(52,168,83,0.25));
+    border-color: rgba(66,133,244,0.80);
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(66,133,244,0.20);
+    box-shadow: 0 4px 14px rgba(66,133,244,0.25);
 }
 .gemini-link-text {
-    color: #7EB8FF !important;
-    font-size: 0.82rem;
-    font-weight: 800;
+    color: #90C8FF !important;
+    font-size: 0.85rem !important;
+    font-weight: 900 !important;
     letter-spacing: 0.02rem;
 }
 
-/* ━━━━ Nav button active glow ━━━━ */
-.nav-active-glow {
-    box-shadow: 0 0 12px rgba(212,175,55,0.20) !important;
-}
+/* ━━━━ Spinner ━━━━ */
+[data-testid="stSpinner"] p { color: #FFD880 !important; font-weight: 700 !important; }
+
+/* ━━━━ Caption / small text ━━━━ */
+[data-testid="stCaptionContainer"] p { color: #D4B870 !important; font-weight: 600 !important; }
+
+/* ━━━━ Radio buttons ━━━━ */
+[data-testid="stRadio"] label p { color: #FFE090 !important; font-weight: 700 !important; }
+
+/* ━━━━ Multiselect ━━━━ */
+[data-testid="stMultiSelect"] span { color: #FFE090 !important; font-weight: 700 !important; }
+
+/* ━━━━ JSON viewer ━━━━ */
+[data-testid="stJson"] { color: #D4F090 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -305,9 +404,15 @@ with st.sidebar:
     # ═══ API Status ═══
     st.markdown("<div style='color:#A08060; font-size:0.70rem; font-weight:900; letter-spacing:0.12rem; margin-bottom:0.5rem;'>🔑 حالة الاتصال</div>", unsafe_allow_html=True)
 
+    # ── تهيئة المفاتيح ──
+    if "openrouter_key" not in st.session_state:
+        st.session_state.openrouter_key = st.secrets.get("OPENROUTER_API_KEY", "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")
+    if "gemini_key" not in st.session_state:
+        st.session_state.gemini_key = st.secrets.get("GEMINI_API_KEY", "")
+
     secrets = {
-        "openrouter": st.secrets.get("OPENROUTER_API_KEY", "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"),
-        "gemini":     st.secrets.get("GEMINI_API_KEY", ""),
+        "openrouter": st.session_state.openrouter_key,
+        "gemini":     st.session_state.gemini_key,
         "luma":       st.secrets.get("LUMA_API_KEY", ""),
         "webhook":    st.secrets.get("WEBHOOK_PUBLISH_CONTENT", ""),
     }
@@ -422,12 +527,71 @@ elif page == "dashboard":
 
 elif page == "settings":
     st.markdown("""
-    <div style='background:linear-gradient(135deg,#0F0A04,#1E1206); border:1px solid rgba(212,175,55,0.35);
-         border-radius:1.2rem; padding:2.5rem; text-align:center; margin-bottom:2rem;'>
-      <h1 style='color:#F5D060; margin:0; font-family:Cairo,sans-serif; font-size:2rem;'>⚙️ الإعدادات</h1>
-      <p style='color:#C0A060; margin:0.4rem 0 0;'>ضبط مفاتيح الAPI · أدوات الربط · نصائح الجودة</p>
+    <div style='background:linear-gradient(135deg,#1A1006,#281808); border:2px solid rgba(212,175,55,0.45);
+         border-radius:1.2rem; padding:2rem; text-align:center; margin-bottom:1.5rem;'>
+      <h1 style='color:#FFE060; margin:0; font-family:Cairo,sans-serif; font-size:2rem; font-weight:900;'>⚙️ الإعدادات</h1>
+      <p style='color:#D4B870; margin:0.4rem 0 0; font-size:0.95rem; font-weight:700;'>ضبط مفاتيح API · أدوات الربط · نصائح الجودة</p>
     </div>
     """, unsafe_allow_html=True)
+
+    # ── حقل إدخال المفاتيح مباشرة ──
+    st.markdown("""
+    <div style='background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(212,175,55,0.06));
+         border:2px solid rgba(212,175,55,0.50); border-radius:1rem; padding:1.4rem 1.6rem;
+         margin-bottom:1.5rem;'>
+      <div style='color:#FFE060; font-size:1.05rem; font-weight:900; margin-bottom:0.3rem;'>🔑 أدخل مفاتيح API مباشرة</div>
+      <div style='color:#D4B870; font-size:0.85rem;'>يُحفظ المفتاح في الجلسة الحالية فقط</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    k1, k2 = st.columns(2)
+    with k1:
+        new_or = st.text_input(
+            "🤖 OpenRouter API Key",
+            value=st.session_state.get("openrouter_key", ""),
+            type="password",
+            placeholder="sk-or-v1-...",
+            help="من openrouter.ai/keys — لتوليد النصوص والتعليقات",
+            key="or_input"
+        )
+        if new_or and new_or != st.session_state.get("openrouter_key", ""):
+            st.session_state.openrouter_key = new_or
+            st.success("✅ تم حفظ مفتاح OpenRouter!")
+    with k2:
+        new_gem = st.text_input(
+            "✨ Gemini API Key",
+            value=st.session_state.get("gemini_key", ""),
+            type="password",
+            placeholder="AIzaSy...",
+            help="من aistudio.google.com — مجاني بالكامل",
+            key="gem_input"
+        )
+        if new_gem and new_gem != st.session_state.get("gemini_key", ""):
+            st.session_state.gemini_key = new_gem
+            st.success("✅ تم حفظ مفتاح Gemini!")
+
+    # عرض حالة المفاتيح الحالية
+    or_ok  = bool(st.session_state.get("openrouter_key", ""))
+    gem_ok = bool(st.session_state.get("gemini_key", ""))
+    s1, s2 = st.columns(2)
+    s1.markdown(f"""
+    <div style='background:{"rgba(52,211,153,0.12)" if or_ok else "rgba(239,68,68,0.12)"};
+         border:1.5px solid {"#34d399" if or_ok else "#ef4444"};
+         border-radius:0.65rem; padding:0.7rem 1rem; text-align:center;'>
+      <div style='color:{"#A0FFD8" if or_ok else "#FFB0B0"}; font-size:0.9rem; font-weight:900;'>
+        {"🟢 OpenRouter متصل" if or_ok else "🔴 OpenRouter — أدخل المفتاح"}
+      </div>
+    </div>""", unsafe_allow_html=True)
+    s2.markdown(f"""
+    <div style='background:{"rgba(52,211,153,0.12)" if gem_ok else "rgba(239,68,68,0.12)"};
+         border:1.5px solid {"#34d399" if gem_ok else "#ef4444"};
+         border-radius:0.65rem; padding:0.7rem 1rem; text-align:center;'>
+      <div style='color:{"#A0FFD8" if gem_ok else "#FFB0B0"}; font-size:0.9rem; font-weight:900;'>
+        {"🟢 Gemini متصل" if gem_ok else "🔴 Gemini — أدخل المفتاح"}
+      </div>
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # ── رابط Gemini بارز في الإعدادات ──
     st.markdown("""

@@ -77,55 +77,58 @@ def show_character_page():
     st.markdown("""
     <style>
     .char-hero {
-        background: linear-gradient(135deg, #0A0600 0%, #150900 60%, #0A0600 100%);
-        border: 1px solid rgba(212,175,55,0.4); border-radius: 1.25rem;
+        background: linear-gradient(135deg, #1A0E02 0%, #281808 60%, #1A0E02 100%);
+        border: 2px solid rgba(212,175,55,0.55); border-radius: 1.25rem;
         padding: 2rem; text-align: center; margin-bottom: 2rem;
     }
-    .char-hero h1 { color: #F5D060; font-size: 2rem; margin: 0; }
-    .char-hero p  { color: #C8A060; margin: 0.4rem 0 0; font-size: 0.88rem; }
+    .char-hero h1 { color: #FFE060; font-size: 2rem; margin: 0; font-weight: 900; }
+    .char-hero p  { color: #F0C870; margin: 0.4rem 0 0; font-size: 0.92rem; font-weight: 700; }
     .dna-box {
-        background: #040200; border: 1px solid rgba(212,175,55,0.2);
-        border-radius: 0.75rem; padding: 1.1rem;
-        font-family: 'Courier New', monospace; font-size: 0.77rem;
-        color: #D4B870; line-height: 1.85; direction: ltr; text-align: left;
+        background: #1A1006; border: 2px solid rgba(212,175,55,0.40);
+        border-radius: 0.75rem; padding: 1.2rem;
+        font-family: 'Courier New', monospace; font-size: 0.8rem;
+        color: #E8D090; line-height: 1.9; direction: ltr; text-align: left;
         white-space: pre-wrap;
     }
     .rule-chip {
-        display: inline-block; background: rgba(239,68,68,0.1);
-        border: 1px solid rgba(239,68,68,0.3); color: #fc8181;
-        padding: 0.25rem 0.65rem; border-radius: 999px; font-size: 0.75rem; margin: 0.2rem;
+        display: inline-block; background: rgba(239,68,68,0.18);
+        border: 1.5px solid rgba(239,68,68,0.50); color: #FFB0B0;
+        padding: 0.28rem 0.7rem; border-radius: 999px; font-size: 0.78rem; margin: 0.2rem;
+        font-weight: 700;
     }
     .fix-chip {
-        display: inline-block; background: rgba(52,211,153,0.08);
-        border: 1px solid rgba(52,211,153,0.3); color: #34d399;
-        padding: 0.25rem 0.65rem; border-radius: 999px; font-size: 0.75rem; margin: 0.2rem;
+        display: inline-block; background: rgba(52,211,153,0.15);
+        border: 1.5px solid rgba(52,211,153,0.50); color: #80FFD0;
+        padding: 0.28rem 0.7rem; border-radius: 999px; font-size: 0.78rem; margin: 0.2rem;
+        font-weight: 700;
     }
     .prompt-result {
-        background: #030200; border: 1px solid rgba(212,175,55,0.3);
-        border-radius: 0.75rem; padding: 1.1rem;
-        font-family: 'Courier New', monospace; font-size: 0.75rem;
-        color: #90C870; line-height: 1.85; direction: ltr; text-align: left;
+        background: #1A1006; border: 2px solid rgba(212,175,55,0.40);
+        border-radius: 0.75rem; padding: 1.2rem;
+        font-family: 'Courier New', monospace; font-size: 0.8rem;
+        color: #B0E870; line-height: 1.9; direction: ltr; text-align: left;
         white-space: pre-wrap; max-height: 400px; overflow-y: auto;
     }
     .reply-card {
-        background: rgba(212,175,55,0.06); border-right: 2px solid #F0CC55;
-        border-radius: 0.4rem; padding: 0.65rem 0.9rem; margin: 0.3rem 0;
-        color: #F5EAD0; font-style: italic; font-size: 0.88rem; line-height: 1.5;
+        background: rgba(212,175,55,0.10); border-right: 3px solid #FFD840;
+        border-radius: 0.5rem; padding: 0.7rem 1rem; margin: 0.3rem 0;
+        color: #FFF0D0; font-style: italic; font-size: 0.9rem; line-height: 1.6;
+        font-weight: 600;
     }
     .outfit-card {
-        background: #080500; border: 1px solid rgba(212,175,55,0.15);
+        background: #1E1408; border: 1.5px solid rgba(212,175,55,0.30);
         border-radius: 0.6rem; padding: 0.9rem; margin-bottom: 0.5rem;
     }
-    .outfit-label { color: #F5D060; font-weight: 800; font-size: 0.88rem; margin-bottom: 0.3rem; }
-    .outfit-use   { color: #B09060; font-size: 0.73rem; margin-bottom: 0.5rem; }
+    .outfit-label { color: #FFE060; font-weight: 900; font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .outfit-use   { color: #D4A860; font-size: 0.78rem; margin-bottom: 0.5rem; font-weight: 600; }
     .scene-card-char {
-        background: #060400; border-right: 3px solid #D4AF37;
+        background: #1A1206; border-right: 4px solid #FFD840;
         border-radius: 0.5rem; padding: 0.8rem; margin-bottom: 0.55rem;
     }
     .scene-num-char {
         display: inline-flex; align-items: center; justify-content: center;
-        background: #D4AF37; color: #000; width: 1.5rem; height: 1.5rem;
-        border-radius: 50%; font-weight: 900; font-size: 0.75rem; margin-left: 0.4rem;
+        background: #D4AF37; color: #000; width: 1.6rem; height: 1.6rem;
+        border-radius: 50%; font-weight: 900; font-size: 0.78rem; margin-left: 0.4rem;
     }
     </style>
     """, unsafe_allow_html=True)
