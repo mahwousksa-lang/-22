@@ -1,134 +1,244 @@
 """
-🎬 استديو مهووس الذكي v10.0
-الواجهة الرئيسية - توليد المحتوى لجميع المنصات
+🎬 استديو مهووس الذكي v11.0
+واجهة رئيسية محسّنة — أعلى معايير الجودة والدقة
 """
 
 import streamlit as st
 import base64
 import json
 import io
+import zipfile
 from datetime import datetime
 from PIL import Image
 
 from modules.ai_engine import (
     analyze_perfume_image, generate_platform_images,
     generate_all_captions, generate_descriptions,
-    generate_hashtags, generate_scenario, generate_video_luma,
-    send_to_make, PLATFORMS, MAHWOUS_OUTFITS, _get_secrets
+    generate_hashtags, generate_scenario,
+    generate_video_luma, send_to_make,
+    generate_perfume_story, build_manual_info,
+    PLATFORMS, MAHWOUS_OUTFITS, _get_secrets
 )
 
-# ─── CSS المتخصص للاستديو ──────────────────────────────────────────────────
+# ─── Studio CSS ────────────────────────────────────────────────────────────────
 STUDIO_CSS = """
 <style>
 .studio-hero {
-    background: linear-gradient(135deg, #0A0600 0%, #1A0E00 40%, #0F0800 100%);
-    border: 1px solid rgba(212,175,55,0.4);
+    background: linear-gradient(135deg, #0A0600 0%, #1A0E00 50%, #0A0600 100%);
+    border: 1px solid rgba(212,175,55,0.45);
     border-radius: 1.25rem; padding: 2.5rem; text-align: center;
     margin-bottom: 2rem; position: relative; overflow: hidden;
 }
 .studio-hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(212,175,55,0.07) 0%, transparent 70%);
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 55% at 50% 40%, rgba(212,175,55,0.09) 0%, transparent 70%);
+    pointer-events: none;
 }
-.studio-hero h1 { color: #D4AF37; font-size: 2.2rem; margin: 0; position: relative; }
-.studio-hero p  { color: #806040; margin: 0.4rem 0 0; font-size: 0.9rem; position: relative; }
+.studio-hero h1 { color: #D4AF37; font-size: 2.3rem; margin: 0; position: relative; letter-spacing: -0.01em; }
+.studio-hero .sub { color: #806040; margin: 0.4rem 0 0; font-size: 0.88rem; position: relative; }
+.studio-hero .version-badge {
+    display: inline-block; background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3);
+    color: #D4AF37; padding: 0.2rem 0.8rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.08rem; margin-top: 0.6rem; position: relative;
+}
 
-.platform-card {
-    background: #0F0900; border: 1px solid rgba(212,175,55,0.15);
-    border-radius: 0.75rem; padding: 1rem; text-align: center;
-    cursor: pointer; transition: all 0.25s;
-    user-select: none;
+.mode-card {
+    background: #0D0800; border: 2px solid rgba(212,175,55,0.2);
+    border-radius: 1rem; padding: 1.5rem; text-align: center; cursor: pointer;
+    transition: all 0.25s; position: relative; overflow: hidden;
 }
-.platform-card:hover { border-color: rgba(212,175,55,0.5); background: rgba(212,175,55,0.05); }
-.platform-card.selected { border-color: #D4AF37; background: rgba(212,175,55,0.1);
-    box-shadow: 0 0 15px rgba(212,175,55,0.15); }
-.platform-emoji { font-size: 1.8rem; display: block; margin-bottom: 0.3rem; }
-.platform-name { color: #D4AF37; font-size: 0.8rem; font-weight: 700; }
-.platform-size { color: #806040; font-size: 0.7rem; margin-top: 0.2rem; }
+.mode-card:hover, .mode-card.active {
+    border-color: #D4AF37; background: rgba(212,175,55,0.06);
+    box-shadow: 0 0 20px rgba(212,175,55,0.12);
+}
+.mode-card .icon { font-size: 2.2rem; display: block; margin-bottom: 0.6rem; }
+.mode-card .title { color: #D4AF37; font-size: 1rem; font-weight: 800; }
+.mode-card .desc { color: #706040; font-size: 0.78rem; margin-top: 0.3rem; line-height: 1.4; }
 
-.result-image-card {
-    background: #0A0600; border: 1px solid rgba(212,175,55,0.2);
-    border-radius: 0.75rem; overflow: hidden; transition: border-color 0.25s;
+.analysis-card {
+    background: linear-gradient(135deg, #080500, #110900);
+    border: 1px solid rgba(212,175,55,0.3); border-radius: 1rem; padding: 1.25rem;
 }
-.result-image-card:hover { border-color: rgba(212,175,55,0.5); }
-.result-image-header {
-    background: rgba(212,175,55,0.08); padding: 0.5rem 0.75rem;
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid rgba(212,175,55,0.15);
+.analysis-card .brand { color: #D4AF37; font-size: 1.4rem; font-weight: 900; }
+.analysis-card .name { color: #F0E0C0; font-size: 1rem; font-weight: 700; }
+.analysis-card .tag {
+    display: inline-block; background: rgba(212,175,55,0.1);
+    border: 1px solid rgba(212,175,55,0.25); color: #C8A030;
+    padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.72rem; margin: 0.15rem;
 }
-.result-image-title { color: #D4AF37; font-size: 0.8rem; font-weight: 700; }
-.result-size-badge { color: #806040; font-size: 0.7rem; }
+.analysis-card .color-dot {
+    display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2); margin: 0 0.2rem; vertical-align: middle;
+}
 
-.caption-box {
-    background: #0A0600; border: 1px solid rgba(212,175,55,0.2);
-    border-radius: 0.75rem; padding: 1rem; margin-bottom: 0.75rem;
+.result-section {
+    background: #080500; border: 1px solid rgba(212,175,55,0.18);
+    border-radius: 1rem; padding: 1.5rem; margin-bottom: 1rem;
+}
+.result-section h3 { color: #D4AF37; font-size: 1.05rem; margin: 0 0 1rem; font-weight: 800; }
+
+.caption-block {
+    background: #050300; border: 1px solid rgba(212,175,55,0.15);
+    border-radius: 0.75rem; padding: 0.9rem; margin-bottom: 0.6rem;
 }
 .caption-header {
-    color: #D4AF37; font-size: 0.85rem; font-weight: 700;
-    margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 0.5rem;
+}
+.caption-title { color: #D4AF37; font-size: 0.85rem; font-weight: 700; }
+
+.hashtag-pill {
+    display: inline-block; background: rgba(212,175,55,0.08);
+    border: 1px solid rgba(212,175,55,0.2); color: #B89030;
+    padding: 0.2rem 0.55rem; border-radius: 999px; font-size: 0.72rem; margin: 0.15rem;
 }
 
-.scenario-scene {
-    background: #0A0600; border-right: 3px solid #D4AF37;
-    border-radius: 0.5rem; padding: 1rem; margin-bottom: 0.75rem;
+.scene-card {
+    background: #060400; border-right: 3px solid #D4AF37;
+    border-radius: 0.5rem; padding: 0.9rem; margin-bottom: 0.65rem;
 }
-.scene-num-badge {
+.scene-num {
     display: inline-flex; align-items: center; justify-content: center;
     background: #D4AF37; color: #000; width: 1.6rem; height: 1.6rem;
-    border-radius: 50%; font-weight: 900; font-size: 0.8rem; margin-left: 0.5rem;
+    border-radius: 50%; font-weight: 900; font-size: 0.78rem; margin-left: 0.4rem;
+    flex-shrink: 0;
 }
 
 .step-badge {
-    display: inline-block; background: rgba(212,175,55,0.15);
-    border: 1px solid rgba(212,175,55,0.3); color: #D4AF37;
-    padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3);
+    color: #D4AF37; padding: 0.3rem 0.9rem; border-radius: 999px;
+    font-size: 0.78rem; font-weight: 800; margin-bottom: 0.5rem;
 }
 
-.flow-prompt-box {
-    background: #050300; border: 1px solid rgba(212,175,55,0.3);
+.flow-prompt {
+    background: #030200; border: 1px solid rgba(100,200,80,0.25);
     border-radius: 0.5rem; padding: 0.75rem; margin-top: 0.5rem;
-    font-family: 'Courier New', monospace; font-size: 0.75rem;
-    color: #A8C870; line-height: 1.7; direction: ltr; text-align: left;
-    white-space: pre-wrap;
+    font-family: 'Courier New', monospace; font-size: 0.73rem;
+    color: #90C860; line-height: 1.7; direction: ltr; text-align: left;
+    white-space: pre-wrap; max-height: 200px; overflow-y: auto;
 }
 
-.progress-steps {
-    display: flex; gap: 0.5rem; flex-wrap: wrap;
-    margin-bottom: 1rem;
+.warning-box {
+    background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.25);
+    border-radius: 0.6rem; padding: 0.75rem; margin-bottom: 0.5rem;
+    color: #D4AF37; font-size: 0.82rem;
 }
-.progress-step {
-    display: flex; align-items: center; gap: 0.3rem;
-    padding: 0.3rem 0.7rem; border-radius: 999px;
-    font-size: 0.75rem; font-weight: 600;
-}
-.step-done { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
-.step-active { background: rgba(212,175,55,0.2); color: #D4AF37; border: 1px solid rgba(212,175,55,0.4); animation: pulse 1.5s infinite; }
-.step-pending { background: rgba(255,255,255,0.03); color: #555; border: 1px solid rgba(255,255,255,0.08); }
 
-@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+.loading-bar {
+    background: linear-gradient(90deg, #1A0A00 25%, #3A2000 50%, #1A0A00 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 0.3rem; height: 4px; margin: 0.5rem 0;
+}
 </style>
+
+<script>
+function copyText(id) {
+    var el = document.getElementById(id);
+    if (el) {
+        navigator.clipboard.writeText(el.innerText || el.value);
+    }
+}
+</script>
 """
 
 
-# ─── Platform Selector Component ──────────────────────────────────────────
-def platform_selector():
-    """مكوّن اختيار المنصات"""
+# ─── Helpers ──────────────────────────────────────────────────────────────────
+def _pil_resize(img_bytes: bytes, target_w: int, target_h: int) -> bytes:
+    """تغيير حجم الصورة بدقة"""
+    try:
+        img = Image.open(io.BytesIO(img_bytes))
+        img = img.convert("RGB")
+        img = img.resize((target_w, target_h), Image.LANCZOS)
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=95, optimize=True)
+        return buf.getvalue()
+    except:
+        return img_bytes
+
+
+def _create_zip(images: dict, info: dict) -> bytes:
+    """إنشاء ZIP يحتوي جميع الصور"""
+    buf = io.BytesIO()
+    brand = info.get("brand", "mahwous").replace(" ", "_").lower()
+    ts = datetime.now().strftime("%Y%m%d_%H%M")
+
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for key, data in images.items():
+            if data.get("bytes"):
+                resized = _pil_resize(data["bytes"], data["w"], data["h"])
+                fname = f"{key}_{data['w']}x{data['h']}.jpg"
+                zf.writestr(fname, resized)
+
+        # Add metadata
+        meta = {
+            "brand":        info.get("brand"),
+            "product_name": info.get("product_name"),
+            "generated_at": datetime.now().isoformat(),
+            "platforms":    list(images.keys()),
+            "source":       "Mahwous AI Studio v11.0"
+        }
+        zf.writestr("info.json", json.dumps(meta, ensure_ascii=False, indent=2))
+
+    buf.seek(0)
+    return buf.read()
+
+
+def _info_card(info: dict):
+    """بطاقة معلومات العطر المحللة"""
+    colors = info.get("colors", [])
+    color_dots = "".join([
+        f"<span class='color-dot' style='background:{c};' title='{c}'></span>"
+        for c in colors[:4]
+    ])
+    tags_html = ""
+    for tag in [info.get("type"), info.get("size"), info.get("gender"), info.get("style")]:
+        if tag:
+            tags_html += f"<span class='tag'>{tag}</span>"
+
+    conf = info.get("confidence", 0)
+    conf_str = f"🎯 دقة التحليل: {int(conf*100)}%" if conf else ""
+
+    st.markdown(f"""
+    <div class="analysis-card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+                <div class="brand">{info.get('brand', '—')}</div>
+                <div class="name">{info.get('product_name', '—')}</div>
+                <div style="margin-top:0.5rem;">{tags_html}</div>
+            </div>
+            <div style="text-align:left; min-width:120px;">
+                <div>{color_dots}</div>
+                <div style="color:#706040; font-size:0.72rem; margin-top:0.4rem;">{conf_str}</div>
+            </div>
+        </div>
+        <div style="margin-top:0.75rem; color:#A09070; font-size:0.8rem; line-height:1.5;">
+            <strong style="color:#906030;">الزجاجة:</strong> {info.get('bottle_shape', '—')}<br>
+            <strong style="color:#906030;">المزاج:</strong> {info.get('mood', '—')} · 
+            <strong style="color:#906030;">الملاحظات:</strong> {info.get('notes_guess', '—')}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# ─── Platform Selector ────────────────────────────────────────────────────────
+def platform_selector() -> list:
     if "selected_platforms" not in st.session_state:
         st.session_state.selected_platforms = ["instagram_post", "instagram_story", "tiktok", "twitter"]
 
-    st.markdown("#### 📱 اختر المنصات")
-
-    # Group platforms
     groups = {
         "📱 عمودي (9:16)": ["instagram_story", "tiktok", "youtube_short", "snapchat"],
         "🖼️ مربع (1:1)":   ["instagram_post"],
         "🖥️ أفقي (16:9)":  ["twitter", "youtube_thumb", "facebook", "linkedin"],
-        "📌 آخرى":          ["pinterest"],
+        "📌 آخرى (2:3)":   ["pinterest"],
     }
 
-    # Select All / Clear
-    c1, c2 = st.columns(2)
+    c1, c2, c3 = st.columns([1, 1, 2])
     if c1.button("✅ تحديد الكل", use_container_width=True, key="sel_all"):
         st.session_state.selected_platforms = list(PLATFORMS.keys())
         st.rerun()
@@ -137,76 +247,102 @@ def platform_selector():
         st.rerun()
 
     for group_name, plat_keys in groups.items():
-        st.markdown(f"<div style='color:#806040; font-size:0.75rem; margin:0.5rem 0 0.3rem; font-weight:700;'>{group_name}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='color:#706040; font-size:0.73rem; font-weight:700; margin:0.5rem 0 0.2rem; letter-spacing:0.05rem;'>{group_name}</div>", unsafe_allow_html=True)
         cols = st.columns(len(plat_keys))
         for col, key in zip(cols, plat_keys):
             plat = PLATFORMS[key]
             is_sel = key in st.session_state.selected_platforms
             with col:
-                if st.checkbox(
+                new_val = st.checkbox(
                     f"{plat['emoji']} {plat['label'].split(' ', 1)[-1]}\n{plat['w']}×{plat['h']}",
                     value=is_sel, key=f"plat_{key}"
-                ):
-                    if key not in st.session_state.selected_platforms:
-                        st.session_state.selected_platforms.append(key)
-                else:
-                    if key in st.session_state.selected_platforms:
-                        st.session_state.selected_platforms.remove(key)
+                )
+                if new_val and key not in st.session_state.selected_platforms:
+                    st.session_state.selected_platforms.append(key)
+                elif not new_val and key in st.session_state.selected_platforms:
+                    st.session_state.selected_platforms.remove(key)
 
     sel_count = len(st.session_state.selected_platforms)
-    st.markdown(f"<div class='step-badge'>✅ {sel_count} منصة مختارة</div>", unsafe_allow_html=True)
+    color = "#34d399" if sel_count > 0 else "#ef4444"
+    st.markdown(f"<div style='color:{color}; font-size:0.82rem; font-weight:700; margin-top:0.4rem;'>{'✅' if sel_count else '⚠️'} {sel_count} منصة مختارة</div>", unsafe_allow_html=True)
     return st.session_state.selected_platforms
 
 
-# ─── Results Display ───────────────────────────────────────────────────────
-def display_images(images: dict):
-    """عرض الصور المولّدة"""
+# ─── Results Display ──────────────────────────────────────────────────────────
+def display_images(images: dict, info: dict):
+    """عرض الصور المولّدة مع تحميل ZIP"""
     if not images:
         return
-    st.markdown("### 🖼️ الصور المولّدة")
 
-    # Group by aspect ratio
-    vertical = {k: v for k, v in images.items() if v.get("aspect") == "9:16" and v.get("bytes")}
-    square   = {k: v for k, v in images.items() if v.get("aspect") == "1:1" and v.get("bytes")}
-    horiz    = {k: v for k, v in images.items() if v.get("aspect") in ("16:9", "4:3") and v.get("bytes")}
-    other    = {k: v for k, v in images.items() if v.get("aspect") == "2:3" and v.get("bytes")}
+    # Stats
+    success = sum(1 for v in images.values() if v.get("bytes"))
+    failed  = len(images) - success
 
-    for group_name, group in [
-        ("📱 عمودي (9:16)", vertical),
-        ("🖼️ مربع (1:1)", square),
-        ("🖥️ أفقي (16:9)", horiz),
-        ("📌 آخرى", other),
-    ]:
+    col_s, col_f, col_dl = st.columns([1, 1, 2])
+    col_s.markdown(f"<div style='color:#34d399; font-size:1.3rem; font-weight:900; text-align:center;'>✅ {success}<div style='font-size:0.7rem; color:#506040;'>ناجحة</div></div>", unsafe_allow_html=True)
+    col_f.markdown(f"<div style='color:{'#ef4444' if failed else '#555'}; font-size:1.3rem; font-weight:900; text-align:center;'>{'❌' if failed else '✓'} {failed}<div style='font-size:0.7rem; color:#504040;'>فاشلة</div></div>", unsafe_allow_html=True)
+
+    # ZIP Download
+    success_imgs = {k: v for k, v in images.items() if v.get("bytes")}
+    if success_imgs:
+        zip_bytes = _create_zip(success_imgs, info)
+        col_dl.download_button(
+            "📦 تحميل جميع الصور (ZIP)",
+            zip_bytes,
+            file_name=f"mahwous_{info.get('brand','brand').replace(' ','_')}_{datetime.now().strftime('%Y%m%d_%H%M')}.zip",
+            mime="application/zip",
+            use_container_width=True,
+            type="primary"
+        )
+
+    st.divider()
+
+    # Group by aspect
+    groups = {
+        "📱 عمودي (9:16)": {k: v for k, v in success_imgs.items() if v.get("aspect") == "9:16"},
+        "🖼️ مربع (1:1)":   {k: v for k, v in success_imgs.items() if v.get("aspect") == "1:1"},
+        "🖥️ أفقي (16:9)":  {k: v for k, v in success_imgs.items() if v.get("aspect") in ("16:9", "4:3")},
+        "📌 آخرى":          {k: v for k, v in success_imgs.items() if v.get("aspect") == "2:3"},
+    }
+
+    for group_name, group in groups.items():
         if not group:
             continue
-        st.markdown(f"<div style='color:#806040; font-size:0.8rem; font-weight:700; margin:1rem 0 0.5rem'>{group_name}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='color:#806040; font-size:0.8rem; font-weight:800; margin:1.2rem 0 0.6rem; letter-spacing:0.04rem;'>{group_name}</div>", unsafe_allow_html=True)
         cols = st.columns(min(len(group), 3))
         for i, (key, data) in enumerate(group.items()):
             with cols[i % 3]:
-                st.markdown(f"<div style='color:#D4AF37; font-size:0.8rem; margin-bottom:0.3rem'>{data['emoji']} {data['label']}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='color:#D4AF37; font-size:0.78rem; font-weight:700; margin-bottom:0.3rem;'>{data['emoji']} {data['label']}</div>", unsafe_allow_html=True)
                 st.image(data["bytes"], use_container_width=True)
+                # Resize and download at correct platform size
+                resized = _pil_resize(data["bytes"], data["w"], data["h"])
                 st.download_button(
-                    f"💾 تحميل",
-                    data["bytes"],
-                    file_name=f"mahwous_{key}_{datetime.now().strftime('%H%M%S')}.jpg",
+                    f"💾 {data['w']}×{data['h']}",
+                    resized,
+                    file_name=f"mahwous_{key}_{data['w']}x{data['h']}.jpg",
                     mime="image/jpeg",
                     key=f"dl_{key}_{i}",
                     use_container_width=True
                 )
+                # Show prompt in expander
+                if data.get("prompt"):
+                    with st.expander("📋 برومت Google Flow"):
+                        st.code(data["prompt"], language="text")
 
-    # Show failures
-    failed = {k: v for k, v in images.items() if not v.get("bytes")}
-    if failed:
-        with st.expander(f"⚠️ {len(failed)} منصة لم تُولَّد"):
-            for k in failed:
-                st.warning(f"❌ {PLATFORMS[k]['label']} - تحقق من Gemini API Key")
+    # Failed platforms
+    failed_imgs = {k: v for k, v in images.items() if not v.get("bytes")}
+    if failed_imgs:
+        with st.expander(f"⚠️ {len(failed_imgs)} منصة لم تُولَّد — انقر لمعرفة السبب"):
+            for k, v in failed_imgs.items():
+                st.error(f"❌ {PLATFORMS[k]['label']} — تحقق من GEMINI_API_KEY وحد الاستخدام")
 
 
 def display_captions(captions: dict):
-    """عرض الـ Captions"""
+    """عرض الـ Captions بتنسيق أنيق"""
     if not captions or "error" in captions:
+        if captions and "error" in captions:
+            st.error(captions["error"])
         return
-    st.markdown("### 📱 Captions المنصات")
 
     platform_map = {
         "instagram_post":  ("📸", "Instagram Post"),
@@ -230,393 +366,565 @@ def display_captions(captions: dict):
         with st.expander(f"{emoji} {name}"):
             if isinstance(cap_data, dict):
                 if "caption" in cap_data:
-                    st.text_area("Caption", cap_data["caption"], height=130, key=f"cap_{key}")
+                    st.text_area("📝 Caption", cap_data["caption"], height=140, key=f"cap_{key}")
                 if "title" in cap_data:
-                    st.text_input("العنوان", cap_data["title"], key=f"title_{key}")
+                    st.text_input("📌 العنوان", cap_data["title"], key=f"t_{key}")
                 if "description" in cap_data:
-                    st.text_area("الوصف", cap_data["description"], height=100, key=f"desc_cap_{key}")
-                if "hashtags" in cap_data and cap_data["hashtags"]:
-                    st.code(" ".join(cap_data["hashtags"]), language=None)
+                    st.text_area("📄 الوصف", cap_data["description"], height=100, key=f"d_{key}")
+                if cap_data.get("hashtags"):
+                    st.markdown("**🏷️ الهاشتاقات:**")
+                    ht_html = " ".join([f"<span class='hashtag-pill'>{h}</span>" for h in cap_data["hashtags"]])
+                    st.markdown(ht_html, unsafe_allow_html=True)
             else:
-                st.text_area("", str(cap_data), height=130, key=f"cap_{key}_str")
+                st.text_area("", str(cap_data), height=130, key=f"cap_{key}_s")
 
 
 def display_scenario(scenario: dict):
-    """عرض السيناريو"""
+    """عرض السيناريو بتنسيق سينمائي"""
     if not scenario or "scenes" not in scenario:
         return
-    st.markdown("### 🎬 سيناريو الفيديو")
-    st.markdown(f"**{scenario.get('title', '')}** | ⏱️ {scenario.get('total_duration', '')} ثانية")
+
+    st.markdown(f"""
+    <div style='background:#080500; border:1px solid rgba(212,175,55,0.3); border-radius:0.75rem; padding:1rem; margin-bottom:1rem;'>
+      <div style='color:#D4AF37; font-size:1.1rem; font-weight:900;'>🎬 {scenario.get('title', 'سيناريو مهووس')}</div>
+      <div style='color:#806040; font-size:0.82rem; margin-top:0.3rem;'>
+        ⏱️ المدة: {scenario.get('total_duration', '—')} ثانية  |  
+        🎯 الهوك: <em style='color:#C8A030;'>"{scenario.get('hook', '')}"</em>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     for scene in scenario.get("scenes", []):
-        with st.expander(f"{'◆ ' if scene.get('type') == 'ذروة' else ''}اللقطة {scene.get('number')} · {scene.get('type')} · {scene.get('duration')} ث"):
-            c1, c2 = st.columns(2)
-            with c1:
-                st.markdown(f"**📷 الكاميرا:** {scene.get('camera', '')}")
-                st.markdown(f"**🎭 المشهد:** {scene.get('visual', '')}")
-                st.markdown(f"**🎭 مهووس:** {scene.get('mahwous_action', '')}")
-            with c2:
-                st.markdown(f"**🎙️ مهووس يقول:** _{scene.get('mahwous_dialogue', '')}_")
-                if scene.get('bottle_dialogue'):
-                    st.markdown(f"**🔊 العطر يقول:** _{scene.get('bottle_dialogue', '')}_")
-                st.markdown(f"**🎵 موسيقى:** {scene.get('music', '')}")
+        num  = scene.get("number", "?")
+        typ  = scene.get("type", "")
+        dur  = scene.get("duration", "")
+        cam  = scene.get("camera", "")
+        mdia = scene.get("mahwous_dialogue", "")
+        bdia = scene.get("bottle_dialogue", "")
+        vis  = scene.get("visual", "")
+        mact = scene.get("mahwous_action", "")
+        music = scene.get("music_mood", scene.get("music", ""))
 
-            # Google Flow Prompt
-            if scene.get("google_flow_prompt"):
-                st.markdown("**برومت Google Flow الجاهز:**")
+        border_color = "#E94560" if typ in ["ذروة", "climax"] else "#D4AF37"
+
+        st.markdown(f"""
+        <div class="scene-card" style="border-right-color:{border_color}">
+          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.5rem;">
+            <span class="scene-num">{num}</span>
+            <span style="color:#D4AF37; font-weight:800; font-size:0.88rem;">{typ}</span>
+            <span style="color:#555; font-size:0.75rem;">⏱ {dur} | 📷 {cam}</span>
+          </div>
+          <div style="color:#A09070; font-size:0.8rem; margin-bottom:0.4rem;">🎭 {vis}</div>
+          <div style="color:#C8B890; font-size:0.8rem; margin-bottom:0.3rem;">🎭 مهووس: {mact}</div>
+          {"<div style='background:rgba(212,175,55,0.04); border-right:2px solid #D4AF37; padding:0.35rem 0.65rem; border-radius:0.3rem; margin:0.3rem 0;'><span style='color:#D4AF37; font-size:0.72rem;'>مهووس: </span><em style='color:#F0E0C0; font-size:0.83rem;'>\"" + mdia + "\"</em></div>" if mdia else ""}
+          {"<div style='background:rgba(233,69,96,0.05); border-right:2px solid #E94560; padding:0.35rem 0.65rem; border-radius:0.3rem; margin:0.3rem 0;'><span style='color:#E94560; font-size:0.72rem;'>العطر: </span><em style='color:#FFD0C0; font-size:0.83rem;'>\"" + bdia + "\"</em></div>" if bdia else ""}
+          <div style="color:#605040; font-size:0.72rem; margin-top:0.3rem;">🎵 {music}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if scene.get("google_flow_prompt"):
+            with st.expander(f"📋 برومت Google Flow — اللقطة {num}"):
                 st.code(scene["google_flow_prompt"], language="text")
 
-    # Outro
+    # Extra info
+    if scenario.get("elevenlabs_voice"):
+        st.info(f"🎙️ **ElevenLabs:** {scenario['elevenlabs_voice']}")
     if scenario.get("outro"):
-        st.info(f"🎬 الخاتمة: {scenario['outro']}")
+        st.markdown(f"<div style='background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.2); border-radius:0.5rem; padding:0.75rem; color:#C8A030; font-size:0.85rem;'>🎬 الخاتمة: {scenario['outro']}</div>", unsafe_allow_html=True)
+    if scenario.get("editor_notes"):
+        with st.expander("✂️ ملاحظات المونتاج"):
+            st.markdown(f"<div style='color:#A09070; font-size:0.83rem;'>{scenario['editor_notes']}</div>", unsafe_allow_html=True)
+
+    # Export scenario
+    st.markdown("")
+    text_export = f"# {scenario.get('title', 'سيناريو مهووس')}\nالمدة: {scenario.get('total_duration')} ثانية\nالهوك: {scenario.get('hook', '')}\n\n"
+    for sc in scenario.get("scenes", []):
+        text_export += f"━━ اللقطة {sc.get('number')}: {sc.get('type')} · {sc.get('duration')} ━━\n"
+        text_export += f"📷 {sc.get('camera')}\n🎭 {sc.get('visual')}\n"
+        if sc.get("mahwous_dialogue"):
+            text_export += f"مهووس: \"{sc['mahwous_dialogue']}\"\n"
+        if sc.get("bottle_dialogue"):
+            text_export += f"العطر: \"{sc['bottle_dialogue']}\"\n"
+        text_export += f"🎵 {sc.get('music_mood', '')}\n\n"
+
+    st.download_button("📄 تحميل السيناريو كاملاً (.txt)", text_export,
+                       file_name=f"scenario_{datetime.now().strftime('%Y%m%d_%H%M')}.txt",
+                       mime="text/plain", use_container_width=True)
 
 
-# ─── Main Studio Page ──────────────────────────────────────────────────────
+# ─── How It Works ─────────────────────────────────────────────────────────────
+def _show_how_it_works():
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("""
+    <div style='text-align:center; margin-bottom:1.5rem;'>
+        <span style='color:#D4AF37; font-size:0.9rem; font-weight:700;'>🚀 كيف يعمل الاستديو؟</span>
+    </div>""", unsafe_allow_html=True)
+    steps = [
+        ("📸", "ارفع صورة العطر", "أو أدخل البيانات يدوياً"),
+        ("🔍", "تحليل ذكي فوري", "Gemini 2.0 يقرأ كل التفاصيل"),
+        ("🎨", "توليد صور لكل منصة", "Imagen 3 بأعلى جودة"),
+        ("✍️", "Captions + سيناريو", "Claude 3.5 يكتب بالخليجي"),
+        ("🚀", "تحميل أو نشر", "ZIP كامل أو Make.com تلقائياً"),
+    ]
+    cols = st.columns(5)
+    for col, (icon, title, sub) in zip(cols, steps):
+        col.markdown(f"""
+        <div style='text-align:center; padding:1rem 0.5rem; background:rgba(212,175,55,0.04);
+             border:1px solid rgba(212,175,55,0.12); border-radius:0.75rem;'>
+          <div style='font-size:1.8rem; margin-bottom:0.4rem;'>{icon}</div>
+          <div style='color:#D4AF37; font-size:0.8rem; font-weight:800; line-height:1.3;'>{title}</div>
+          <div style='color:#504030; font-size:0.68rem; margin-top:0.2rem; line-height:1.3;'>{sub}</div>
+        </div>""", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+
+
+# ─── Main Studio Page ──────────────────────────────────────────────────────────
 def show_studio_page():
     st.markdown(STUDIO_CSS, unsafe_allow_html=True)
 
     st.markdown("""
     <div class="studio-hero">
       <h1>🎬 استديو مهووس الذكي</h1>
-      <p>v10.0 · توليد صور وفيديو ومحتوى لجميع منصات التواصل الاجتماعي · بشخصية مهووس الثابتة</p>
+      <p class="sub">توليد صور · فيديو · Captions · سيناريوهات · هاشتاقات لجميع المنصات</p>
+      <div class="version-badge">v11.0 · POWERED BY GEMINI 2.0 + CLAUDE 3.5</div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Check API Status
     secrets = _get_secrets()
-    has_gemini = bool(secrets["gemini"])
+    has_gemini    = bool(secrets["gemini"])
     has_openrouter = bool(secrets["openrouter"])
 
+    # API Alerts
     if not has_gemini:
-        st.warning("⚠️ أضف GEMINI_API_KEY في Secrets لتوليد الصور")
-    if not has_openrouter:
-        st.warning("⚠️ أضف OPENROUTER_API_KEY في Secrets لتوليد النصوص")
+        st.markdown("<div class='warning-box'>⚠️ <strong>GEMINI_API_KEY</strong> غير موجود — توليد الصور وتحليل الصور سيكون معطلاً. أضفه في Settings → Secrets</div>", unsafe_allow_html=True)
+
+    # ─── Step 1: Input Mode ──────────────────────────────────────────────────
+    st.markdown('<div class="step-badge">① اختر طريقة الإدخال</div>', unsafe_allow_html=True)
+
+    if "input_mode" not in st.session_state:
+        st.session_state.input_mode = "image"
+
+    mode_col1, mode_col2 = st.columns(2)
+    with mode_col1:
+        is_img = st.session_state.input_mode == "image"
+        if st.button(
+            f"📸  رفع صورة العطر\n{'← محدد' if is_img else 'انقر للاختيار'}",
+            use_container_width=True,
+            type="primary" if is_img else "secondary",
+            key="mode_image"
+        ):
+            st.session_state.input_mode = "image"
+            st.rerun()
+    with mode_col2:
+        is_man = st.session_state.input_mode == "manual"
+        if st.button(
+            f"⌨️  إدخال البيانات يدوياً\n{'← محدد' if is_man else 'انقر للاختيار'}",
+            use_container_width=True,
+            type="primary" if is_man else "secondary",
+            key="mode_manual"
+        ):
+            st.session_state.input_mode = "manual"
+            st.rerun()
 
     st.markdown("---")
 
-    # ─── STEP 1: Upload Perfume Image ─────────────────────────────────────
-    st.markdown('<span class="step-badge">الخطوة 1</span> **رفع صورة العطر**', unsafe_allow_html=True)
+    # ─── Step 2: Input ───────────────────────────────────────────────────────
+    perfume_info = None
+    image_bytes  = None
 
-    col_img, col_char = st.columns([1, 1])
+    if st.session_state.input_mode == "image":
+        st.markdown('<div class="step-badge">② رفع صورة العطر</div>', unsafe_allow_html=True)
 
-    with col_img:
-        uploaded = st.file_uploader(
-            "📸 ارفع صورة العطر (JPG/PNG/WEBP)",
-            type=["jpg", "jpeg", "png", "webp"],
-            label_visibility="collapsed",
-            key="perfume_upload"
-        )
-        if uploaded:
-            st.image(uploaded, use_container_width=True)
-            if "perfume_info" not in st.session_state:
-                st.session_state.perfume_info = None
+        col_img, col_char = st.columns([1, 1])
 
-    with col_char:
-        st.markdown("**👤 إعدادات شخصية مهووس**")
+        with col_img:
+            uploaded = st.file_uploader(
+                "📸 ارفع صورة العطر (JPG/PNG/WEBP)",
+                type=["jpg", "jpeg", "png", "webp"],
+                label_visibility="collapsed",
+                key="perfume_upload"
+            )
+            if uploaded:
+                st.image(uploaded, use_container_width=True, caption="✅ صورة العطر")
+                image_bytes = uploaded.getvalue()
 
-        # Character Reference Upload
-        char_img = st.file_uploader(
-            "ارفع صورة مرجعية لمهووس (اختياري)",
-            type=["jpg", "jpeg", "png"],
-            key="char_upload",
-            help="صورة mahwous_character.png للحفاظ على ثبات الشخصية"
-        )
-        if char_img:
-            st.image(char_img, caption="مرجع مهووس ✅", use_container_width=True)
-            st.session_state.char_reference = char_img.getvalue()
-            st.success("✅ تم حفظ صورة مهووس المرجعية")
+        with col_char:
+            st.markdown("**⚙️ إعدادات الجلسة**")
+            char_img = st.file_uploader(
+                "👤 صورة مرجعية لمهووس (اختياري)",
+                type=["jpg", "jpeg", "png"],
+                key="char_upload",
+                help="mahwous_character.png — يحافظ على ثبات الشخصية"
+            )
+            if char_img:
+                st.image(char_img, caption="✅ مرجع مهووس", use_container_width=True)
+                st.session_state.char_reference = char_img.getvalue()
 
+        if not uploaded:
+            _show_how_it_works()
+            return
+
+        # ── Auto-Analyze ──────────────────────────────────────────────────
+        st.markdown("---")
+        st.markdown('<div class="step-badge">③ تحليل العطر</div>', unsafe_allow_html=True)
+
+        analyze_key = f"analyzed_{hash(image_bytes)}"
+        if analyze_key not in st.session_state:
+            if has_gemini:
+                with st.spinner("🔍 تحليل صورة العطر بـ Gemini 2.0..."):
+                    try:
+                        info = analyze_perfume_image(image_bytes)
+                        st.session_state[analyze_key] = info
+                        st.session_state.gen_count += 1
+                    except Exception as e:
+                        st.error(f"❌ فشل التحليل: {e}")
+                        return
+            else:
+                # Fallback info
+                info = build_manual_info("عطر مهووس", "Mahwous", "EDP", "100ml",
+                                          "unisex", "luxury", ["gold", "black"],
+                                          "elegant luxury flacon", "فاخر وغامض", "عود وعنبر")
+                st.session_state[analyze_key] = info
+
+        perfume_info = st.session_state.get(analyze_key, {})
+
+        # Display analysis card
+        _info_card(perfume_info)
+
+        # Allow editing
+        with st.expander("✏️ تعديل بيانات التحليل"):
+            c1, c2, c3 = st.columns(3)
+            perfume_info["product_name"] = c1.text_input("اسم العطر", perfume_info.get("product_name", ""))
+            perfume_info["brand"]        = c2.text_input("العلامة التجارية", perfume_info.get("brand", ""))
+            perfume_info["type"]         = c3.text_input("النوع", perfume_info.get("type", "EDP"))
+            c4, c5, c6 = st.columns(3)
+            perfume_info["gender"] = c4.selectbox("الجنس", ["masculine", "feminine", "unisex"],
+                                                    index=["masculine","feminine","unisex"].index(perfume_info.get("gender","unisex")) if perfume_info.get("gender","unisex") in ["masculine","feminine","unisex"] else 2)
+            perfume_info["style"]  = c5.selectbox("الطابع", ["luxury","oriental","niche","sport","modern","classic"],
+                                                    index=0)
+            perfume_info["mood"]   = c6.text_input("المزاج", perfume_info.get("mood", "فاخر"))
+            perfume_info["bottle_shape"] = st.text_area("شكل الزجاجة", perfume_info.get("bottle_shape", ""), height=60)
+            perfume_info["notes_guess"]  = st.text_input("ملاحظات العطر المتوقعة", perfume_info.get("notes_guess", ""))
+
+    else:  # Manual mode
+        st.markdown('<div class="step-badge">② إدخال بيانات العطر</div>', unsafe_allow_html=True)
+
+        c1, c2 = st.columns(2)
+        with c1:
+            m_name   = st.text_input("🌹 اسم العطر *", placeholder="مثال: Oud for Greatness")
+            m_brand  = st.text_input("🏷️ العلامة التجارية *", placeholder="مثال: Initio")
+            m_type   = st.selectbox("💧 النوع", ["EDP", "EDT", "Parfum", "Extrait", "EDC", "Oil"])
+            m_size   = st.text_input("📏 الحجم", value="100ml")
+        with c2:
+            m_gender = st.selectbox("👤 الجنس", ["masculine", "feminine", "unisex"])
+            m_style  = st.selectbox("✨ الطابع", ["luxury", "oriental", "niche", "sport", "modern", "classic"])
+            m_colors = st.text_input("🎨 الألوان (مفصولة بفاصلة)", placeholder="gold, black, silver")
+            m_mood   = st.text_input("🌙 المزاج", placeholder="فاخر وغامض وشرقي")
+
+        m_bottle = st.text_area("🫙 وصف الزجاجة", placeholder="مثال: زجاجة مستطيلة بغطاء أسود لامع وجسم ذهبي نصف شفاف...", height=80)
+        m_notes  = st.text_input("🌺 ملاحظات العطر", placeholder="مثال: عود، عنبر، مسك، فانيليا")
+
+        if not m_name or not m_brand:
+            st.markdown("<div class='warning-box'>⚠️ أدخل اسم العطر والعلامة التجارية للمتابعة</div>", unsafe_allow_html=True)
+            _show_how_it_works()
+            return
+
+        colors_list = [c.strip() for c in m_colors.split(",") if c.strip()] or ["gold", "black"]
+        perfume_info = build_manual_info(m_name, m_brand, m_type, m_size, m_gender,
+                                          m_style, colors_list, m_bottle, m_mood, m_notes)
+        _info_card(perfume_info)
+
+    # ─── Step 3: Settings ─────────────────────────────────────────────────────
+    st.markdown("---")
+    st.markdown('<div class="step-badge">④ إعدادات الجلسة والمنصات</div>', unsafe_allow_html=True)
+
+    col_char2, col_scene = st.columns(2)
+    with col_char2:
         outfit_choice = st.selectbox(
             "👔 زي مهووس",
             options=list(MAHWOUS_OUTFITS.keys()),
-            format_func=lambda k: {"suit": "🤵 البدلة الفاخرة", "hoodie": "🏆 الهودي الأيقوني",
-                                    "thobe": "👘 الثوب الملكي", "casual": "👕 الكاجوال"}[k]
-        )
-        scene_choice = st.selectbox(
-            "🎭 مكان المشهد",
-            options=["store", "beach", "desert", "studio", "garden"],
-            format_func=lambda k: {"store": "🏪 متجر العطور", "beach": "🌅 شاطئ غروب",
-                                    "desert": "🏜️ صحراء ذهبية", "studio": "🎬 استديو فاخر",
-                                    "garden": "🌹 حديقة ملكية"}[k]
+            format_func=lambda k: {"suit":"🤵 البدلة الفاخرة","hoodie":"🏆 الهودي الأيقوني",
+                                    "thobe":"👘 الثوب الملكي","casual":"👕 الكاجوال"}[k],
+            key="outfit_sel"
         )
         include_char = st.toggle("🧑 تضمين شخصية مهووس في الصور", value=True)
+        ramadan_mode = st.toggle("🌙 وضع رمضان الاحتفالي", value=False)
 
-    if not uploaded:
-        _show_how_it_works()
-        return
+    with col_scene:
+        scene_choice = st.selectbox(
+            "🎭 مكان المشهد",
+            options=["store","beach","desert","studio","garden","rooftop","car"],
+            format_func=lambda k: {"store":"🏪 متجر العطور","beach":"🌅 شاطئ غروب",
+                                    "desert":"🏜️ صحراء ذهبية","studio":"🎬 استديو فاخر",
+                                    "garden":"🌹 حديقة ملكية","rooftop":"🌆 سطح ناطحة",
+                                    "car":"🚗 سيارة فارهة"}[k],
+            key="scene_sel"
+        )
+
+    st.markdown("---")
+    selected_platforms = platform_selector()
+
+    # ─── Step 4: Content Options ──────────────────────────────────────────────
+    st.markdown("---")
+    st.markdown('<div class="step-badge">⑤ اختر المحتوى المطلوب</div>', unsafe_allow_html=True)
+
+    oc1, oc2, oc3 = st.columns(3)
+    with oc1:
+        opt_images   = st.checkbox("🖼️ توليد صور لكل منصة", value=True,
+                                    help="يتطلب GEMINI_API_KEY" if not has_gemini else "")
+        opt_captions = st.checkbox("📝 Captions لكل منصة", value=True)
+        opt_story    = st.checkbox("📖 قصة عطرية إبداعية", value=False)
+    with oc2:
+        opt_desc     = st.checkbox("📄 5 أوصاف تسويقية", value=True)
+        opt_hashtags = st.checkbox("🏷️ 45 هاشتاق", value=True)
+        opt_publish  = st.checkbox("🚀 نشر تلقائي (Make.com)", value=False,
+                                    help="يتطلب WEBHOOK_PUBLISH_CONTENT")
+    with oc3:
+        opt_scenario = st.checkbox("🎬 سيناريو فيديو TikTok", value=False)
+        opt_video    = st.checkbox("🎥 توليد فيديو (Luma AI)", value=False,
+                                    help="يتطلب LUMA_API_KEY")
+
+    if opt_scenario:
+        scenario_type = st.selectbox("نوع السيناريو", [
+            "dialogue", "story", "challenge", "review", "unboxing"
+        ], format_func=lambda k: {
+            "dialogue": "💬 حوار مهووس والعطر",
+            "story":    "📖 قصة تحول 3 مشاهد",
+            "challenge":"⚔️ مشهد الاكتشاف",
+            "review":   "⭐ مراجعة خبير",
+            "unboxing": "📦 فتح العلبة السينمائي"
+        }[k])
+    else:
+        scenario_type = "dialogue"
 
     st.markdown("---")
 
-    # ─── STEP 2: Select Platforms ──────────────────────────────────────────
-    st.markdown('<span class="step-badge">الخطوة 2</span> **اختر المنصات والمحتوى**', unsafe_allow_html=True)
+    # ─── Step 5: Generate Button ──────────────────────────────────────────────
+    num_selected = len(selected_platforms)
+    btn_disabled = num_selected == 0
 
-    col_plat, col_opts = st.columns([3, 2])
+    if not btn_disabled:
+        tasks = []
+        if opt_images and has_gemini:  tasks.append(f"صور ({num_selected} منصة)")
+        if opt_captions:               tasks.append("Captions (12 منصة)")
+        if opt_desc:                   tasks.append("5 أوصاف")
+        if opt_hashtags:               tasks.append("45 هاشتاق")
+        if opt_scenario:               tasks.append("سيناريو TikTok")
+        if opt_story:                  tasks.append("قصة إبداعية")
+        if opt_video:                  tasks.append("فيديو Luma")
+        btn_label = f"⚡ ابدأ التوليد — {' · '.join(tasks)}"
+    else:
+        btn_label = "⚠️ اختر منصة واحدة على الأقل"
 
-    with col_plat:
-        selected_platforms = platform_selector()
-
-    with col_opts:
-        st.markdown("**📦 خيارات المحتوى**")
-        opt_images   = st.checkbox("🖼️ توليد صور لكل منصة", value=True)
-        opt_captions = st.checkbox("📝 توليد Captions لكل منصة", value=True)
-        opt_desc     = st.checkbox("📄 توليد 5 أوصاف", value=True)
-        opt_hashtags = st.checkbox("🏷️ توليد 40 هاشتاق", value=True)
-        opt_scenario = st.checkbox("🎬 توليد سيناريو فيديو", value=False)
-        opt_video    = st.checkbox("🎥 توليد فيديو (Luma AI)", value=False)
-        opt_publish  = st.checkbox("🚀 نشر تلقائي (Make.com)", value=False)
-
-        if opt_scenario:
-            scenario_type = st.selectbox("نوع السيناريو", [
-                "dialogue", "story", "challenge", "review"
-            ], format_func=lambda k: {
-                "dialogue": "💬 حوار مهووس والعطر",
-                "story": "📖 قصة قصيرة 3 مشاهد",
-                "challenge": "⚔️ مشهد الاكتشاف",
-                "review": "⭐ مراجعة احترافية"
-            }[k])
-        else:
-            scenario_type = "dialogue"
-
-    st.markdown("---")
-
-    # ─── STEP 3: Generate ─────────────────────────────────────────────────
-    btn_label = f"🚀 ابدأ التوليد ({len(selected_platforms)} منصة)"
-    if st.button(btn_label, type="primary", use_container_width=True, disabled=not selected_platforms):
-
-        image_bytes = uploaded.getvalue()
+    if st.button(btn_label, type="primary", use_container_width=True, disabled=btn_disabled):
         all_results = {}
-
-        # Progress tracking
         progress_bar = st.progress(0)
         status_text  = st.empty()
 
-        # === Step 1: Analyze image ===
-        status_text.markdown("🔍 **تحليل صورة العطر...**")
-        progress_bar.progress(5)
-        try:
-            if has_gemini:
-                info = analyze_perfume_image(image_bytes)
-            else:
-                # Fallback: manual info
-                info = {
-                    "product_name": "عطر مهووس",
-                    "brand": "Mahwous",
-                    "type": "EDP",
-                    "size": "100ml",
-                    "colors": ["gold", "black"],
-                    "bottle_shape": "elegant luxury bottle",
-                    "style": "luxury",
-                    "gender": "unisex",
-                    "mood": "فاخر"
-                }
-            st.session_state.perfume_info = info
-            status_text.markdown(f"✅ **تم تحليل:** {info.get('product_name')} - {info.get('brand')}")
-        except Exception as e:
-            st.error(f"❌ فشل تحليل الصورة: {e}")
-            return
+        total_steps = sum([
+            bool(opt_captions), bool(opt_desc), bool(opt_hashtags),
+            bool(opt_scenario), bool(opt_story),
+            bool(opt_images and has_gemini),
+            bool(opt_video), bool(opt_publish)
+        ])
+        step = 0
 
-        # === Step 2: Generate Captions ===
+        def advance(msg: str):
+            nonlocal step
+            step += 1
+            pct = int((step / max(total_steps, 1)) * 90)
+            progress_bar.progress(pct)
+            status_text.markdown(f"**{msg}**")
+
+        # === Captions ===
         if opt_captions:
-            progress_bar.progress(20)
-            status_text.markdown("📝 **توليد Captions لجميع المنصات...**")
+            advance("📝 توليد Captions لـ 12 منصة...")
             try:
-                all_results["captions"] = generate_all_captions(info)
-                status_text.markdown("✅ **Captions لـ 12 منصة!**")
+                all_results["captions"] = generate_all_captions(perfume_info)
             except Exception as e:
-                st.warning(f"⚠️ فشل توليد Captions: {e}")
+                st.warning(f"⚠️ Captions: {e}")
 
-        # === Step 3: Generate Descriptions ===
+        # === Descriptions ===
         if opt_desc:
-            progress_bar.progress(30)
-            status_text.markdown("📄 **توليد الأوصاف...**")
+            advance("📄 توليد 5 أوصاف تسويقية...")
             try:
-                all_results["descriptions"] = generate_descriptions(info)
+                all_results["descriptions"] = generate_descriptions(perfume_info)
             except Exception as e:
-                st.warning(f"⚠️ فشل توليد الأوصاف: {e}")
+                st.warning(f"⚠️ أوصاف: {e}")
 
-        # === Step 4: Generate Hashtags ===
+        # === Hashtags ===
         if opt_hashtags:
-            progress_bar.progress(35)
-            status_text.markdown("🏷️ **توليد الهاشتاقات...**")
+            advance("🏷️ توليد 45 هاشتاق محسوب...")
             try:
-                all_results["hashtags"] = generate_hashtags(info)
+                all_results["hashtags"] = generate_hashtags(perfume_info)
             except Exception as e:
-                st.warning(f"⚠️ فشل توليد الهاشتاقات: {e}")
+                st.warning(f"⚠️ هاشتاقات: {e}")
 
-        # === Step 5: Generate Scenario ===
+        # === Scenario ===
         if opt_scenario:
-            progress_bar.progress(40)
-            status_text.markdown("🎬 **توليد سيناريو الفيديو...**")
+            advance(f"🎬 توليد سيناريو {scenario_type}...")
             try:
-                all_results["scenario"] = generate_scenario(info, scenario_type)
+                all_results["scenario"] = generate_scenario(perfume_info, scenario_type)
             except Exception as e:
-                st.warning(f"⚠️ فشل توليد السيناريو: {e}")
+                st.warning(f"⚠️ سيناريو: {e}")
 
-        # === Step 6: Generate Images ===
+        # === Creative Story ===
+        if opt_story:
+            advance("📖 كتابة القصة العطرية...")
+            try:
+                all_results["story"] = generate_perfume_story(perfume_info)
+            except Exception as e:
+                st.warning(f"⚠️ قصة: {e}")
+
+        # === Images ===
         if opt_images and has_gemini and selected_platforms:
-            progress_bar.progress(45)
-            status_text.markdown(f"🖼️ **توليد صور لـ {len(selected_platforms)} منصة...**")
-
-            def img_progress(pct, msg):
-                progress_bar.progress(int(45 + pct * 40))
-                status_text.markdown(f"🖼️ **{msg}**")
-
+            advance(f"🖼️ توليد صور لـ {num_selected} منصة...")
+            def img_cb(pct, msg):
+                progress_bar.progress(int(step / max(total_steps, 1) * 90 - 10 + pct * 10))
+                status_text.markdown(f"**{msg}**")
             try:
                 all_results["images"] = generate_platform_images(
-                    info, selected_platforms, outfit_choice, scene_choice,
-                    include_char, img_progress
+                    perfume_info, selected_platforms, outfit_choice, scene_choice,
+                    include_char, img_cb, ramadan_mode
                 )
+                st.session_state.img_count += len([v for v in all_results["images"].values() if v.get("bytes")])
             except Exception as e:
-                st.warning(f"⚠️ فشل توليد الصور: {e}")
+                st.warning(f"⚠️ صور: {e}")
 
-        # === Step 7: Generate Video ===
+        # === Video ===
         if opt_video:
-            progress_bar.progress(86)
-            status_text.markdown("🎥 **توليد الفيديو (3-5 دقائق)...**")
+            advance("🎥 توليد فيديو Luma AI (3-5 دقائق)...")
             try:
-                vid_aspect = "9:16" if "tiktok" in selected_platforms or "instagram_story" in selected_platforms else "16:9"
-                all_results["video"] = generate_video_luma(info, vid_aspect)
-                if "url" in all_results["video"]:
-                    status_text.markdown("✅ **تم توليد الفيديو!**")
-                else:
-                    st.warning(f"⚠️ {all_results['video'].get('error', 'فشل الفيديو')}")
+                vid_aspect = "9:16" if any(p in selected_platforms for p in ["tiktok","instagram_story"]) else "16:9"
+                all_results["video"] = generate_video_luma(perfume_info, vid_aspect)
+                if "url" not in all_results["video"]:
+                    st.warning(f"⚠️ فيديو: {all_results['video'].get('error')}")
             except Exception as e:
-                st.warning(f"⚠️ فشل توليد الفيديو: {e}")
+                st.warning(f"⚠️ فيديو: {e}")
 
-        # === Step 8: Publish ===
+        # === Publish ===
         if opt_publish:
-            progress_bar.progress(95)
-            status_text.markdown("📡 **إرسال إلى Make.com...**")
-            make_payload = {
-                **info,
-                "captions": all_results.get("captions", {}),
+            advance("📡 إرسال إلى Make.com...")
+            payload = {
+                **perfume_info,
+                "captions":   all_results.get("captions", {}),
                 "descriptions": all_results.get("descriptions", {}),
-                "hashtags": all_results.get("hashtags", {}),
-                "video_url": all_results.get("video", {}).get("url", ""),
-                "platforms_generated": selected_platforms,
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "source": "mahwous_studio_v10"
+                "hashtags":   all_results.get("hashtags", {}),
+                "video_url":  all_results.get("video", {}).get("url", ""),
+                "platforms":  selected_platforms,
+                "timestamp":  datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "source":     "mahwous_studio_v11"
             }
-            if send_to_make(make_payload):
+            if send_to_make(payload):
                 st.success("✅ تم الإرسال إلى Make.com!")
             else:
-                st.warning("⚠️ فشل الإرسال - تحقق من Webhook URL")
+                st.warning("⚠️ فشل الإرسال — تحقق من WEBHOOK_PUBLISH_CONTENT")
 
         progress_bar.progress(100)
-        status_text.markdown("✅ **اكتمل التوليد!**")
+        status_text.markdown("✅ **اكتمل التوليد بنجاح!**")
+        st.session_state.gen_count += 1
 
-        # ═══ Display Results ═══
-        _display_all_results(all_results, info)
+        # === Display Results ===
+        _display_all_results(all_results, perfume_info)
 
 
 def _display_all_results(results: dict, info: dict):
-    """عرض جميع النتائج"""
+    """عرض كل النتائج"""
     st.markdown("---")
     st.markdown("## 📦 نتائج التوليد")
 
-    # ─── Product Info ───
-    with st.expander("🧴 معلومات العطر المكتشفة", expanded=False):
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("العطر", info.get("product_name", "—"))
-        c2.metric("العلامة", info.get("brand", "—"))
-        c3.metric("النوع", info.get("type", "—"))
-        c4.metric("الجنس", info.get("gender", "—"))
-        st.json(info)
+    # Product summary
+    with st.expander("🧴 ملخص بيانات العطر", expanded=False):
+        _info_card(info)
+        with st.expander("JSON كامل"):
+            st.json(info)
 
-    # ─── Images ───
+    # Images
     if "images" in results:
-        display_images(results["images"])
+        with st.expander("🖼️ الصور المولّدة", expanded=True):
+            display_images(results["images"], info)
 
-    # ─── Video ───
+    # Video
     if "video" in results and results["video"].get("url"):
-        st.markdown("### 🎥 الفيديو المولّد")
-        st.video(results["video"]["url"])
+        with st.expander("🎥 الفيديو المولّد", expanded=True):
+            st.video(results["video"]["url"])
 
-    # ─── Scenario ───
-    if "scenario" in results:
-        display_scenario(results["scenario"])
+    # Scenario
+    if "scenario" in results and results["scenario"].get("scenes"):
+        with st.expander("🎬 سيناريو الفيديو", expanded=True):
+            display_scenario(results["scenario"])
 
-    # ─── Captions ───
+    # Captions
     if "captions" in results:
-        display_captions(results["captions"])
+        with st.expander("📱 Captions جميع المنصات", expanded=True):
+            display_captions(results["captions"])
 
-    # ─── Descriptions ───
+    # Creative Story
+    if "story" in results and results["story"]:
+        with st.expander("📖 القصة العطرية الإبداعية", expanded=False):
+            st.markdown(f"<div style='background:#060400; border:1px solid rgba(212,175,55,0.2); border-radius:0.75rem; padding:1.2rem; color:#E8D8B0; font-size:0.88rem; line-height:1.8; font-style:italic;'>{results['story']}</div>", unsafe_allow_html=True)
+            st.download_button("📄 تحميل القصة", results["story"],
+                               file_name=f"story_{info.get('brand','brand')}.txt", mime="text/plain")
+
+    # Descriptions
     if "descriptions" in results and results["descriptions"]:
         desc = results["descriptions"]
-        st.markdown("### 📄 الأوصاف")
-        tabs = st.tabs(["قصير", "متوسط", "طويل", "إعلاني", "SEO"])
-        for tab, (key, label) in zip(tabs, [
-            ("short","قصير"), ("medium","متوسط"), ("long","طويل"), ("ad","إعلاني"), ("seo","SEO")
-        ]):
-            with tab:
-                if key == "seo" and isinstance(desc.get("seo"), dict):
-                    seo = desc["seo"]
-                    st.text_input("العنوان", seo.get("title",""), key="seo_t")
-                    st.text_area("الميتا", seo.get("meta",""), height=80, key="seo_m")
-                    st.text_area("المحتوى", seo.get("content",""), height=150, key="seo_c")
-                    if seo.get("keywords"):
-                        st.code(" · ".join(seo["keywords"]))
-                else:
-                    st.text_area("", desc.get(key,""), height=180, key=f"d_{key}")
+        with st.expander("📄 الأوصاف التسويقية الخمسة", expanded=False):
+            tabs = st.tabs(["⚡ قصير", "📝 متوسط", "📜 طويل", "🎯 إعلاني", "🔍 SEO"])
+            keys_labels = [("short","قصير"),("medium","متوسط"),("long","طويل"),("ad","إعلاني"),("seo","SEO")]
+            for tab, (key, label) in zip(tabs, keys_labels):
+                with tab:
+                    if key == "seo" and isinstance(desc.get("seo"), dict):
+                        seo = desc["seo"]
+                        st.text_input("العنوان (60 حرف)", seo.get("title",""), key="seo_t")
+                        st.text_area("الميتا (155 حرف)", seo.get("meta",""), height=70, key="seo_m")
+                        st.text_area("محتوى SEO", seo.get("content",""), height=150, key="seo_c")
+                        if seo.get("keywords"):
+                            kw_html = " ".join([f"<span class='hashtag-pill'>{k}</span>" for k in seo["keywords"]])
+                            st.markdown(kw_html, unsafe_allow_html=True)
+                    else:
+                        st.text_area("", desc.get(key,""), height=200, key=f"d_{key}")
 
-    # ─── Hashtags ───
+    # Hashtags
     if "hashtags" in results and results["hashtags"]:
         ht = results["hashtags"]
-        st.markdown("### 🏷️ الهاشتاقات")
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.markdown("**🇸🇦 عربي (20)**")
-            st.code(" ".join(ht.get("arabic", [])))
-        with c2:
-            st.markdown("**🌍 إنجليزي (20)**")
-            st.code(" ".join(ht.get("english", [])))
-        with c3:
-            st.markdown("**🔥 ترندينج**")
-            st.code(" ".join(ht.get("trending", [])))
+        with st.expander("🏷️ 45 هاشتاق", expanded=False):
+            hc1, hc2, hc3 = st.columns(3)
+            with hc1:
+                st.markdown("**🇸🇦 عربي (20)**")
+                arabic_ht = " ".join(ht.get("arabic", []))
+                st.text_area("", arabic_ht, height=130, key="ht_ar")
+            with hc2:
+                st.markdown("**🌍 إنجليزي (20)**")
+                eng_ht = " ".join(ht.get("english", []))
+                st.text_area("", eng_ht, height=130, key="ht_en")
+            with hc3:
+                st.markdown("**🔥 ترندينج (5)**")
+                tr_ht = " ".join(ht.get("trending", []))
+                st.text_area("", tr_ht, height=130, key="ht_tr")
 
-    # ─── Download All JSON ───
+            all_ht = f"{arabic_ht} {eng_ht} {tr_ht}"
+            st.download_button("📋 نسخ كل الهاشتاقات (.txt)", all_ht,
+                               file_name="hashtags.txt", mime="text/plain", use_container_width=True)
+
+    # Download All JSON
     st.markdown("---")
-    full_export = {
-        "product": info,
+    export = {
+        "product":      info,
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "captions": results.get("captions", {}),
+        "source":       "Mahwous AI Studio v11.0",
+        "captions":     results.get("captions", {}),
         "descriptions": results.get("descriptions", {}),
-        "hashtags": results.get("hashtags", {}),
-        "scenario": results.get("scenario", {}),
-        "video_url": results.get("video", {}).get("url", ""),
+        "hashtags":     results.get("hashtags", {}),
+        "scenario":     results.get("scenario", {}),
+        "story":        results.get("story", ""),
+        "video_url":    results.get("video", {}).get("url", ""),
     }
-    brand = info.get("brand", "brand").replace(" ", "_")
+    brand_clean = info.get("brand", "brand").replace(" ", "_").lower()
     st.download_button(
-        "📥 تحميل كل المحتوى (JSON)",
-        json.dumps(full_export, ensure_ascii=False, indent=2),
-        file_name=f"mahwous_{brand}_{datetime.now().strftime('%Y%m%d_%H%M')}.json",
+        "📥 تحميل كل المحتوى النصي (JSON)",
+        json.dumps(export, ensure_ascii=False, indent=2),
+        file_name=f"mahwous_{brand_clean}_{datetime.now().strftime('%Y%m%d_%H%M')}.json",
         mime="application/json",
         use_container_width=True
     )
-
-
-def _show_how_it_works():
-    """عرض كيف يعمل النظام"""
-    st.markdown("---")
-    cols = st.columns(5)
-    steps = [
-        ("📸", "ارفع صورة العطر"),
-        ("🔍", "تحليل ذكي تلقائي"),
-        ("🎨", "توليد صور لكل منصة"),
-        ("✍️", "Captions + سيناريو"),
-        ("🚀", "نشر تلقائي"),
-    ]
-    for col, (icon, title) in zip(cols, steps):
-        col.markdown(f"""
-        <div style='text-align:center; padding:1rem; background:rgba(212,175,55,0.05);
-             border:1px solid rgba(212,175,55,0.15); border-radius:0.75rem;'>
-          <div style='font-size:2rem'>{icon}</div>
-          <div style='color:#D4AF37; font-size:0.82rem; font-weight:700; margin-top:0.4rem'>{title}</div>
-        </div>""", unsafe_allow_html=True)
-
-    st.markdown("---")
-    st.markdown("""
-    <div style='text-align:center; color:#806040; font-size:0.85rem; padding:1rem;'>
-      ⬆️ <strong style='color:#D4AF37'>ارفع صورة العطر للبدء</strong>
-    </div>
-    """, unsafe_allow_html=True)
