@@ -1,5 +1,5 @@
 """
-🌹 مهووس للعطور - استديو الذكاء الاصطناعي v11.0
+🌹 مهووس للعطور - استديو الذكاء الاصطناعي v12.0
 أعلى معايير الجودة والدقة · Gemini 2.0 + Claude 3.5
 """
 import streamlit as st
@@ -11,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ═══ GLOBAL CSS ═══
+# ═══ GLOBAL CSS — ألوان محسّنة وقراءة أوضح ═══
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
@@ -21,141 +21,176 @@ html, body, [class*="css"] {
     direction: rtl;
 }
 .stApp {
-    background: #050300;
+    background: #0E0B06;
+}
+/* ━━━━ Main content background ━━━━ */
+.main .block-container {
+    background: #100D07;
+    border-radius: 1rem;
+    padding: 1.5rem 2rem !important;
 }
 
-/* ═══ Sidebar ═══ */
+/* ━━━━ Sidebar ━━━━ */
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #060400 0%, #0C0700 50%, #060400 100%) !important;
-    border-left: 1px solid rgba(212,175,55,0.2) !important;
+    background: linear-gradient(180deg, #0D0902 0%, #160E04 50%, #0D0902 100%) !important;
+    border-left: 1px solid rgba(212,175,55,0.3) !important;
 }
 [data-testid="stSidebarNav"] { display: none; }
 
-/* ═══ Buttons ═══ */
+/* ━━━━ Buttons — Primary ━━━━ */
 div.stButton > button {
-    background: linear-gradient(135deg, #7A5810 0%, #C8A030 40%, #ECC850 55%, #906018 100%);
-    color: #000 !important; border: none; border-radius: 0.6rem;
-    font-family: 'Cairo', sans-serif !important; font-weight: 800;
-    font-size: 0.88rem; letter-spacing: 0.02rem;
-    transition: all 0.2s ease; box-shadow: 0 2px 10px rgba(212,175,55,0.18);
-    padding: 0.5rem 1.2rem;
+    background: linear-gradient(135deg, #8A6415 0%, #D4A82A 40%, #F0CC55 55%, #9A6A1A 100%);
+    color: #1A0D00 !important; border: none; border-radius: 0.65rem;
+    font-family: 'Cairo', sans-serif !important; font-weight: 900;
+    font-size: 0.92rem; letter-spacing: 0.02rem;
+    transition: all 0.2s ease; box-shadow: 0 3px 14px rgba(212,175,55,0.25);
+    padding: 0.55rem 1.3rem;
 }
 div.stButton > button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(212,175,55,0.32);
+    box-shadow: 0 8px 26px rgba(212,175,55,0.40);
+    background: linear-gradient(135deg, #9A7020 0%, #E4B83A 40%, #FFD860 55%, #AA7A20 100%);
 }
 div.stButton > button:active { transform: translateY(0); }
+
+/* ━━━━ Buttons — Secondary ━━━━ */
 div.stButton > button[kind="secondary"] {
-    background: rgba(212,175,55,0.07) !important;
-    color: #C8A030 !important;
-    border: 1px solid rgba(212,175,55,0.25) !important;
+    background: rgba(212,175,55,0.10) !important;
+    color: #DDB840 !important;
+    border: 1px solid rgba(212,175,55,0.35) !important;
     box-shadow: none !important;
 }
 div.stButton > button[kind="secondary"]:hover {
-    background: rgba(212,175,55,0.12) !important;
-    border-color: rgba(212,175,55,0.45) !important;
+    background: rgba(212,175,55,0.18) !important;
+    border-color: rgba(212,175,55,0.55) !important;
+    color: #F0CC55 !important;
 }
 
-/* ═══ Tabs ═══ */
+/* ━━━━ Tabs ━━━━ */
 [data-testid="stTabs"] button[role="tab"] {
     font-family: 'Cairo', sans-serif !important;
-    color: #706040 !important; font-weight: 600; font-size: 0.85rem;
+    color: #907860 !important; font-weight: 600; font-size: 0.88rem;
 }
 [data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+    color: #F0CC55 !important;
+    border-bottom: 2.5px solid #D4AF37 !important;
+    font-weight: 900 !important;
+}
+[data-testid="stTabs"] button[role="tab"]:hover {
     color: #D4AF37 !important;
-    border-bottom: 2px solid #D4AF37 !important;
-    font-weight: 800 !important;
 }
 
-/* ═══ Inputs ═══ */
+/* ━━━━ Inputs ━━━━ */
 [data-testid="stTextInput"] input,
 [data-testid="stTextArea"] textarea,
 [data-testid="stSelectbox"] > div > div,
 [data-testid="stNumberInput"] input {
-    background: #080500 !important;
-    color: #E8D8B0 !important;
-    border: 1px solid rgba(212,175,55,0.2) !important;
-    border-radius: 0.5rem !important;
+    background: #180F04 !important;
+    color: #F0E0C0 !important;
+    border: 1.5px solid rgba(212,175,55,0.28) !important;
+    border-radius: 0.55rem !important;
     font-family: 'Cairo', sans-serif !important;
+    font-size: 0.9rem !important;
 }
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
-    border-color: rgba(212,175,55,0.55) !important;
-    box-shadow: 0 0 0 2px rgba(212,175,55,0.1) !important;
+    border-color: rgba(212,175,55,0.65) !important;
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.12) !important;
 }
-label, .stSelectbox label { color: #907050 !important; font-size: 0.82rem !important; }
+/* Labels — أوضح كثيراً */
+label, .stSelectbox label, .stTextInput label, .stTextArea label {
+    color: #C0A070 !important;
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+}
 
-/* ═══ Metrics ═══ */
-[data-testid="stMetricValue"] { color: #D4AF37 !important; font-weight: 900 !important; }
-[data-testid="stMetricLabel"] { color: #806040 !important; }
+/* ━━━━ Metrics ━━━━ */
+[data-testid="stMetricValue"] { color: #F0CC55 !important; font-weight: 900 !important; font-size: 2rem !important; }
+[data-testid="stMetricLabel"] { color: #A08060 !important; font-weight: 700 !important; }
 
-/* ═══ Expanders ═══ */
+/* ━━━━ Expanders ━━━━ */
 .streamlit-expanderHeader {
-    background: rgba(212,175,55,0.04) !important;
-    border: 1px solid rgba(212,175,55,0.12) !important;
-    border-radius: 0.5rem !important;
-    color: #C8A030 !important;
+    background: rgba(212,175,55,0.07) !important;
+    border: 1px solid rgba(212,175,55,0.20) !important;
+    border-radius: 0.6rem !important;
+    color: #DDB840 !important;
     font-family: 'Cairo', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
 }
 .streamlit-expanderContent {
-    border: 1px solid rgba(212,175,55,0.08) !important;
+    border: 1px solid rgba(212,175,55,0.12) !important;
     border-top: none !important;
-    background: rgba(0,0,0,0.3) !important;
+    background: rgba(14,10,4,0.8) !important;
+    border-radius: 0 0 0.6rem 0.6rem !important;
 }
 
-/* ═══ Alerts ═══ */
-.stSuccess { background: rgba(52,211,153,0.07) !important; border-color: #34d399 !important; border-radius: 0.6rem !important; }
-.stWarning { background: rgba(251,191,36,0.07) !important; border-color: #fbbf24 !important; border-radius: 0.6rem !important; }
-.stError   { background: rgba(239,68,68,0.07)  !important; border-color: #ef4444 !important; border-radius: 0.6rem !important; }
-.stInfo    { background: rgba(212,175,55,0.05)  !important; border-color: rgba(212,175,55,0.25) !important; border-radius: 0.6rem !important; }
+/* ━━━━ Alerts ━━━━ */
+.stSuccess { background: rgba(52,211,153,0.10) !important; border-color: #34d399 !important; border-radius: 0.65rem !important; color: #6FFFD0 !important; }
+.stWarning { background: rgba(251,191,36,0.10) !important; border-color: #fbbf24 !important; border-radius: 0.65rem !important; color: #FFD060 !important; }
+.stError   { background: rgba(239,68,68,0.10)  !important; border-color: #ef4444 !important; border-radius: 0.65rem !important; color: #FF8080 !important; }
+.stInfo    { background: rgba(212,175,55,0.08)  !important; border-color: rgba(212,175,55,0.40) !important; border-radius: 0.65rem !important; color: #DDB840 !important; }
 
-/* ═══ Checkboxes & Toggles ═══ */
-[data-testid="stCheckbox"] label { color: #C0A880 !important; font-size: 0.85rem !important; }
-[data-testid="stToggle"] label { color: #C0A880 !important; }
+/* ━━━━ Checkboxes & Toggles ━━━━ */
+[data-testid="stCheckbox"] label { color: #D4C090 !important; font-size: 0.88rem !important; font-weight: 600 !important; }
+[data-testid="stToggle"] label { color: #D4C090 !important; font-weight: 600 !important; }
 
-/* ═══ Divider ═══ */
-hr { border-color: rgba(212,175,55,0.12) !important; margin: 1rem 0 !important; }
+/* ━━━━ Divider ━━━━ */
+hr { border-color: rgba(212,175,55,0.18) !important; margin: 1.2rem 0 !important; }
 
-/* ═══ Progress Bar ═══ */
+/* ━━━━ Progress Bar ━━━━ */
 .stProgress > div > div > div {
-    background: linear-gradient(90deg, #A08020, #D4AF37, #F0D060) !important;
+    background: linear-gradient(90deg, #B09030, #D4AF37, #F5D560, #D4AF37) !important;
+    border-radius: 999px !important;
 }
 
-/* ═══ File Uploader ═══ */
+/* ━━━━ File Uploader ━━━━ */
 [data-testid="stFileUploader"] {
-    border: 2px dashed rgba(212,175,55,0.25) !important;
-    border-radius: 0.75rem !important;
-    background: rgba(212,175,55,0.02) !important;
-    padding: 1rem !important;
+    border: 2px dashed rgba(212,175,55,0.35) !important;
+    border-radius: 0.85rem !important;
+    background: rgba(212,175,55,0.04) !important;
+    padding: 1.2rem !important;
 }
 [data-testid="stFileUploader"]:hover {
-    border-color: rgba(212,175,55,0.5) !important;
-    background: rgba(212,175,55,0.04) !important;
+    border-color: rgba(212,175,55,0.6) !important;
+    background: rgba(212,175,55,0.07) !important;
 }
+[data-testid="stFileUploaderDropzoneInstructions"] { color: #C0A070 !important; }
 
-/* ═══ Code blocks ═══ */
-.stCodeBlock { border-radius: 0.5rem !important; }
+/* ━━━━ Code blocks ━━━━ */
+.stCodeBlock { border-radius: 0.6rem !important; border: 1px solid rgba(212,175,55,0.15) !important; }
+.stCode code { color: #D4F090 !important; }
 
-/* ═══ Download buttons ═══ */
+/* ━━━━ Download buttons ━━━━ */
 [data-testid="stDownloadButton"] button {
-    background: rgba(212,175,55,0.1) !important;
-    color: #D4AF37 !important;
-    border: 1px solid rgba(212,175,55,0.3) !important;
-    font-size: 0.82rem !important;
+    background: linear-gradient(135deg, rgba(212,175,55,0.12), rgba(212,175,55,0.18)) !important;
+    color: #F0CC55 !important;
+    border: 1.5px solid rgba(212,175,55,0.40) !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    border-radius: 0.55rem !important;
 }
 [data-testid="stDownloadButton"] button:hover {
-    background: rgba(212,175,55,0.18) !important;
-    border-color: rgba(212,175,55,0.5) !important;
+    background: linear-gradient(135deg, rgba(212,175,55,0.22), rgba(212,175,55,0.30)) !important;
+    border-color: rgba(212,175,55,0.65) !important;
+    transform: translateY(-1px) !important;
 }
 
-/* ═══ Scrollbar ═══ */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: #050300; }
-::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.25); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(212,175,55,0.45); }
+/* ━━━━ Scrollbar ━━━━ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #0E0B06; }
+::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.30); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(212,175,55,0.55); }
 
-/* ═══ Select Slider ═══ */
+/* ━━━━ Select Slider ━━━━ */
 [data-testid="stSlider"] .st-bq { color: #D4AF37 !important; }
+
+/* ━━━━ Section Headers ━━━━ */
+h1,h2,h3 { font-family: 'Cairo', sans-serif !important; color: #F0CC55 !important; }
+p { color: #C0A880 !important; }
+
+/* ━━━━ Sidebar text ━━━━ */
+.sidebar-label { color: #A08060 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -167,15 +202,20 @@ with st.sidebar:
     # Logo
     st.markdown("""
     <div style="text-align:center; padding: 1.5rem 0 1.2rem;">
-      <div style="font-size:3.5rem; filter:drop-shadow(0 0 16px rgba(212,175,55,0.65)); margin-bottom:0.3rem;">🌹</div>
-      <div style="font-family:'Playfair Display',serif; font-size:2rem;
-                  background:linear-gradient(135deg,#906010,#ECC850,#906010);
+      <div style="font-size:3.8rem; filter:drop-shadow(0 0 20px rgba(212,175,55,0.75)); margin-bottom:0.4rem;">🌹</div>
+      <div style="font-family:'Playfair Display',serif; font-size:2.1rem;
+                  background:linear-gradient(135deg,#A07015,#F0CC55,#A07015);
                   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
                   background-clip:text; font-weight:900; letter-spacing:0.03rem; line-height:1;">
         مهووس
       </div>
-      <div style="font-size:0.58rem; color:#4A3010; letter-spacing:0.35rem; margin-top:0.2rem; font-weight:700;">
-        AI CONTENT STUDIO
+      <div style="font-size:0.6rem; color:#806040; letter-spacing:0.30rem; margin-top:0.3rem; font-weight:800; text-transform:uppercase;">
+        استديو الذكاء الاصطناعي
+      </div>
+      <div style="margin-top:0.5rem; display:inline-block; background:rgba(212,175,55,0.15);
+           border:1px solid rgba(212,175,55,0.3); border-radius:999px;
+           padding:0.15rem 0.7rem; font-size:0.62rem; color:#D4AF37; font-weight:800; letter-spacing:0.1rem;">
+        v12.0
       </div>
     </div>
     """, unsafe_allow_html=True)
@@ -216,7 +256,7 @@ with st.sidebar:
     st.markdown("<hr style='margin:0.8rem 0'>", unsafe_allow_html=True)
 
     # ═══ API Status ═══
-    st.markdown("<div style='color:#4A3010; font-size:0.68rem; font-weight:800; letter-spacing:0.15rem; margin-bottom:0.5rem;'>🔑 حالة الاتصال</div>", unsafe_allow_html=True)
+    st.markdown("<div style='color:#A08060; font-size:0.72rem; font-weight:900; letter-spacing:0.12rem; margin-bottom:0.6rem;'>🔑 حالة الاتصال</div>", unsafe_allow_html=True)
 
     secrets = {
         "openrouter": st.secrets.get("OPENROUTER_API_KEY", "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"),
@@ -226,20 +266,21 @@ with st.sidebar:
     }
 
     api_items = [
-        (bool(secrets["openrouter"]), "OpenRouter · Claude 3.5", "نصوص + Captions", True),
-        (bool(secrets["gemini"]),     "Gemini 2.0 Flash",        "صور + تحليل",     True),
-        (bool(secrets["luma"]),       "Luma AI",                 "فيديو (اختياري)", False),
-        (bool(secrets["webhook"]),    "Make.com",                "نشر (اختياري)",   False),
+        (bool(secrets["openrouter"]), "كلود 3.5 (نصوص)", True),
+        (bool(secrets["gemini"]),     "جيميني 2.0 (صور)", True),
+        (bool(secrets["luma"]),       "Luma (فيديو)",     False),
+        (bool(secrets["webhook"]),    "Make.com (نشر)",   False),
     ]
 
-    for ok, name, role, required in api_items:
-        icon    = "●" if ok else "○"
-        color   = "#34d399" if ok else ("#ef4444" if required else "#4A3010")
-        note    = "" if ok else (" — أضف في Secrets" if required else "")
+    for ok, name, required in api_items:
+        icon   = "🟢" if ok else ("🔴" if required else "⚪")
+        status = "متصل" if ok else ("أضف المفتاح" if required else "اختياري")
+        color  = "#6FE8B8" if ok else ("#FF8888" if required else "#806050")
         st.markdown(
-            f"<div style='color:{color}; font-size:0.78rem; padding:0.12rem 0; display:flex; justify-content:space-between;'>"
-            f"<span>{icon} {name}</span>"
-            f"<span style='color:#4A3010; font-size:0.68rem;'>{role}{note}</span>"
+            f"<div style='background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.15); border-radius:0.4rem;"
+            f"padding:0.35rem 0.6rem; margin-bottom:0.3rem; display:flex; justify-content:space-between; align-items:center;'>"
+            f"<span style='color:#D4C090; font-size:0.8rem; font-weight:700;'>{icon} {name}</span>"
+            f"<span style='color:{color}; font-size:0.72rem; font-weight:700;'>{status}</span>"
             f"</div>",
             unsafe_allow_html=True
         )
@@ -251,17 +292,20 @@ with st.sidebar:
         st.session_state.gen_count = 0
         st.session_state.img_count = 0
 
+    st.markdown("<hr style='margin:0.8rem 0'>", unsafe_allow_html=True)
+    st.markdown("<div style='color:#A08060; font-size:0.72rem; font-weight:900; letter-spacing:0.12rem; margin-bottom:0.6rem;'>📊 إحصائيات الجلسة</div>", unsafe_allow_html=True)
+
     sc1, sc2 = st.columns(2)
     for col, label, val, icon in [
         (sc1, "عمليات",  st.session_state.gen_count, "🚀"),
         (sc2, "صور",     st.session_state.img_count, "🖼️"),
     ]:
         col.markdown(f"""
-        <div style='text-align:center; background:rgba(212,175,55,0.05);
-             border:1px solid rgba(212,175,55,0.12); border-radius:0.5rem; padding:0.5rem 0.3rem;'>
-          <div style='font-size:1rem; margin-bottom:0.1rem;'>{icon}</div>
-          <div style='color:#D4AF37; font-size:1.3rem; font-weight:900; line-height:1;'>{val}</div>
-          <div style='color:#4A3010; font-size:0.65rem; margin-top:0.1rem;'>{label}</div>
+        <div style='text-align:center; background:rgba(212,175,55,0.08);
+             border:1px solid rgba(212,175,55,0.20); border-radius:0.6rem; padding:0.65rem 0.3rem;'>
+          <div style='font-size:1.1rem; margin-bottom:0.2rem;'>{icon}</div>
+          <div style='color:#F0CC55; font-size:1.5rem; font-weight:900; line-height:1;'>{val}</div>
+          <div style='color:#A08060; font-size:0.7rem; margin-top:0.2rem; font-weight:700;'>{label}</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("<hr style='margin:0.8rem 0'>", unsafe_allow_html=True)
@@ -269,12 +313,12 @@ with st.sidebar:
     # Model info
     st.markdown("""
     <div style='text-align:center;'>
-      <div style='color:#3A2510; font-size:0.62rem; letter-spacing:0.05rem; line-height:1.8;'>
-        🤖 Gemini 2.0 Flash · Imagen 3.0<br>
-        ✍️ Claude 3.5 Sonnet (OpenRouter)<br>
+      <div style='color:#806050; font-size:0.68rem; letter-spacing:0.03rem; line-height:2;'>
+        🤖 Gemini 2.0 · Imagen 3.0<br>
+        ✍️ Claude 3.5 Sonnet<br>
         🎥 Luma Dream Machine
       </div>
-      <div style='color:#2A1808; font-size:0.58rem; margin-top:0.5rem;'>© 2026 مهووس للعطور · v11.0</div>
+      <div style='color:#604030; font-size:0.6rem; margin-top:0.5rem;'>© 2026 مهووس للعطور · v12.0</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -290,111 +334,159 @@ elif page == "character":
 
 elif page == "dashboard":
     st.markdown("""
-    <div style='background:linear-gradient(135deg,#060400,#100800); border:1px solid rgba(212,175,55,0.3);
-         border-radius:1rem; padding:2rem; text-align:center; margin-bottom:2rem;'>
-      <h1 style='color:#D4AF37; margin:0; font-family:Playfair Display,serif;'>📊 الإحصائيات</h1>
-      <p style='color:#806040; margin:0.3rem 0 0; font-size:0.88rem;'>متابعة نشاط الاستديو في هذه الجلسة</p>
+    <div style='background:linear-gradient(135deg,#0F0A04,#1E1206); border:1px solid rgba(212,175,55,0.35);
+         border-radius:1.2rem; padding:2.5rem; text-align:center; margin-bottom:2rem;'>
+      <h1 style='color:#F0CC55; margin:0; font-family:Cairo,sans-serif; font-size:2rem;'>📊 لوحة الإحصائيات</h1>
+      <p style='color:#A08060; margin:0.4rem 0 0; font-size:0.92rem;'>متابعة نشاط الاستديو في هذه الجلسة</p>
     </div>
     """, unsafe_allow_html=True)
 
     cols = st.columns(4)
     metrics = [
-        ("🚀", "عمليات التوليد",   str(st.session_state.gen_count)),
-        ("🖼️", "صور مولّدة",       str(st.session_state.img_count)),
-        ("🎥", "فيديوهات",         "—"),
-        ("📡", "منشورات تلقائية",  "—"),
+        ("🚀", "عمليات التوليد",   str(st.session_state.gen_count), "#F0CC55"),
+        ("🖼️", "صور مولّدة",       str(st.session_state.img_count), "#6FE8B8"),
+        ("🎥", "فيديوهات",         "—", "#C0A0FF"),
+        ("📡", "منشورات تلقائية",  "—", "#FF9060"),
     ]
-    for col, (icon, label, val) in zip(cols, metrics):
+    for col, (icon, label, val, color) in zip(cols, metrics):
         col.markdown(f"""
-        <div style='background:#080500; border:1px solid rgba(212,175,55,0.15);
-             border-radius:0.75rem; padding:1.5rem; text-align:center;'>
-          <div style='font-size:2rem; margin-bottom:0.3rem;'>{icon}</div>
-          <div style='color:#D4AF37; font-size:2.2rem; font-weight:900; line-height:1;'>{val}</div>
-          <div style='color:#806040; font-size:0.8rem; margin-top:0.3rem;'>{label}</div>
+        <div style='background:linear-gradient(135deg,#120C04,#1E1408); border:1px solid rgba(212,175,55,0.20);
+             border-radius:0.9rem; padding:1.8rem 1rem; text-align:center; transition:all 0.2s;'>
+          <div style='font-size:2.2rem; margin-bottom:0.4rem;'>{icon}</div>
+          <div style='color:{color}; font-size:2.4rem; font-weight:900; line-height:1;'>{val}</div>
+          <div style='color:#A08060; font-size:0.82rem; margin-top:0.4rem; font-weight:700;'>{label}</div>
         </div>""", unsafe_allow_html=True)
 
-    st.info("📈 الإحصائيات تُحدَّث تلقائياً مع كل عملية توليد")
-    st.caption("ملاحظة: الإحصائيات تُعاد إلى الصفر عند إعادة تحميل الصفحة. لحفظها دائماً، أضف قاعدة بيانات.")
-
-elif page == "settings":
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.info("📈 الإحصائيات تُحدَّث تلقائياً مع كل عملية توليد — تُعاد عند إعادة تحميل الصفحة")
+    
+    # Quick tips
     st.markdown("""
-    <div style='background:linear-gradient(135deg,#060400,#100800); border:1px solid rgba(212,175,55,0.3);
-         border-radius:1rem; padding:2rem; text-align:center; margin-bottom:2rem;'>
-      <h1 style='color:#D4AF37; margin:0; font-family:Playfair Display,serif;'>⚙️ الإعدادات</h1>
-      <p style='color:#806040; margin:0.4rem 0 0;'>ضبط API Keys · أدوات الربط · نصائح الجودة</p>
+    <div style='background:rgba(212,175,55,0.06); border:1px solid rgba(212,175,55,0.18); 
+         border-radius:0.75rem; padding:1.2rem; margin-top:1rem;'>
+      <div style='color:#F0CC55; font-size:0.95rem; font-weight:900; margin-bottom:0.8rem;'>💡 نصائح لأسرع أداء</div>
+      <div style='color:#C0A070; font-size:0.85rem; line-height:2;'>
+        ✓ اختر 3–4 منصات فقط لكل جلسة<br>
+        ✓ ارفع صورة العطر بدقة عالية وخلفية بيضاء<br>
+        ✓ فعّل وضع رمضان في المناسبات<br>
+        ✓ حمّل ZIP بعد كل جلسة لحفظ الصور
+      </div>
     </div>
     """, unsafe_allow_html=True)
 
-    with st.expander("🔑 إعداد API Keys في Streamlit Cloud Secrets", expanded=True):
-        st.markdown("**افتح:** Streamlit Cloud → اختر تطبيقك → Settings → Secrets → أضف:")
-        st.code("""# ═══ مطلوب ═══
-OPENROUTER_API_KEY = "sk-or-v1-..."       # من openrouter.ai (موجود مسبقاً)
-GEMINI_API_KEY     = "AIzaSy..."          # من aistudio.google.com (مجاني)
+elif page == "settings":
+    st.markdown("""
+    <div style='background:linear-gradient(135deg,#0F0A04,#1E1206); border:1px solid rgba(212,175,55,0.35);
+         border-radius:1.2rem; padding:2.5rem; text-align:center; margin-bottom:2rem;'>
+      <h1 style='color:#F0CC55; margin:0; font-family:Cairo,sans-serif; font-size:2rem;'>⚙️ الإعدادات</h1>
+      <p style='color:#A08060; margin:0.4rem 0 0;'>ضبط مفاتيح الAPI · أدوات الربط · نصائح الجودة</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-# ═══ اختياري ═══
-LUMA_API_KEY               = "luma-..."  # من lumalabs.ai — لتوليد الفيديو
-WEBHOOK_PUBLISH_CONTENT    = "https://hook.eu2.make.com/..."  # Make.com للنشر التلقائي""",
-                language="toml")
+    with st.expander("🔑 إعداد مفاتيح API في Streamlit Cloud", expanded=True):
         st.markdown("""
-        **الخطوات:**
-        1. [aistudio.google.com](https://aistudio.google.com) → Get API Key → انسخ المفتاح
-        2. ألصقه في Secrets كـ `GEMINI_API_KEY`
-        3. أعد تشغيل التطبيق
-        """)
+        <div style='color:#C0A070; font-size:0.9rem; margin-bottom:0.8rem;'>
+        <strong style='color:#F0CC55;'>الخطوة:</strong> افتح Streamlit Cloud ← اختر تطبيقك ← Settings ← Secrets ← أضف:
+        </div>
+        """, unsafe_allow_html=True)
+        st.code("""# ━━━━ مطلوب ━━━━
+OPENROUTER_API_KEY = "sk-or-v1-..."    # من openrouter.ai
+GEMINI_API_KEY     = "AIzaSy..."       # من aistudio.google.com (مجاني)
 
-    with st.expander("🤖 النماذج المستخدمة في v11.0"):
+# ━━━━ اختياري ━━━━
+LUMA_API_KEY            = "luma-..."   # من lumalabs.ai — لتوليد الفيديو
+WEBHOOK_PUBLISH_CONTENT = "https://hook.eu2.make.com/..."  # للنشر التلقائي""",
+                language="toml")
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("""
+            <div style='background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.2);
+                 border-radius:0.6rem; padding:0.9rem;'>
+              <div style='color:#F0CC55; font-weight:900; margin-bottom:0.5rem;'>🆓 Gemini مجاني</div>
+              <div style='color:#C0A070; font-size:0.82rem; line-height:1.8;'>
+                1. افتح aistudio.google.com<br>
+                2. انقر Get API Key<br>
+                3. انسخ والصق في Secrets
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
+        with c2:
+            st.markdown("""
+            <div style='background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.2);
+                 border-radius:0.6rem; padding:0.9rem;'>
+              <div style='color:#F0CC55; font-weight:900; margin-bottom:0.5rem;'>🤖 OpenRouter</div>
+              <div style='color:#C0A070; font-size:0.82rem; line-height:1.8;'>
+                1. افتح openrouter.ai<br>
+                2. Keys → Create Key<br>
+                3. انسخ والصق في Secrets
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    with st.expander("🤖 النماذج المستخدمة في v12.0"):
         models_data = [
-            ("🔍 Gemini 2.0 Flash",   "تحليل صور العطر",              "سريع ودقيق"),
-            ("🎨 Imagen 3.0 v2",      "توليد صور المنصات",            "أعلى جودة"),
-            ("✍️ Claude 3.5 Sonnet",  "توليد النصوص والـ Captions",   "عربي فاخر"),
-            ("🎥 Luma Dream Machine", "توليد الفيديو",                 "سينمائي"),
+            ("🔍", "Gemini 2.0 Flash",   "تحليل صور العطر",             "#6FE8B8"),
+            ("🎨", "Imagen 3.0 v2",      "توليد صور المنصات",           "#C0A0FF"),
+            ("✍️", "Claude 3.5 Sonnet",  "توليد النصوص والتعليقات",     "#F0CC55"),
+            ("🎥", "Luma Dream Machine", "توليد الفيديو السينمائي",      "#FF9060"),
         ]
-        for icon_name, role, quality in models_data:
+        for icon, name, role, color in models_data:
             st.markdown(f"""
             <div style='display:flex; justify-content:space-between; align-items:center;
-                 background:#080500; border:1px solid rgba(212,175,55,0.12);
-                 border-radius:0.5rem; padding:0.6rem 0.9rem; margin-bottom:0.35rem;'>
-              <span style='color:#D4AF37; font-weight:700; font-size:0.82rem;'>{icon_name}</span>
-              <span style='color:#806040; font-size:0.75rem;'>{role}</span>
-              <span style='color:#34d399; font-size:0.72rem; font-weight:700;'>✓ {quality}</span>
+                 background:#120C04; border:1px solid rgba(212,175,55,0.15);
+                 border-radius:0.55rem; padding:0.7rem 1rem; margin-bottom:0.4rem;'>
+              <span style='color:{color}; font-weight:800; font-size:0.88rem;'>{icon} {name}</span>
+              <span style='color:#A08060; font-size:0.8rem;'>{role}</span>
+              <span style='color:#6FE8B8; font-size:0.75rem; font-weight:700;'>✓ نشط</span>
             </div>""", unsafe_allow_html=True)
 
-    with st.expander("📸 ثبات الشخصية والمنتج — الدليل الكامل"):
+    with st.expander("📸 ثبات الشخصية — الدليل الكامل"):
         st.markdown("""
-        #### في Google Flow / Veo / Kling AI:
-        1. أنشئ مشروعاً جديداً
-        2. ارفع `mahwous_character.png` → **Character Reference** → نشاط 80%
-        3. ارفع صورة الزجاجة الأصلية → **Product Reference** → نشاط 90%
-        4. الصق DNA الشخصية كاملاً من قسم **🎭 الشخصية والسيناريو**
-        5. إضافة: `STRICTLY maintain character and product consistency`
-
-        #### في Streamlit Studio:
-        - ارفع mahwous_character.png في خانة "صورة مرجعية لمهووس"
-        - سيُدمج تلقائياً في كل برومت
-        """)
+        <div style='color:#C0A070; font-size:0.88rem; line-height:2;'>
+        <strong style='color:#F0CC55;'>في Google Flow / Veo / Kling AI:</strong><br>
+        1️⃣ أنشئ مشروعاً جديداً<br>
+        2️⃣ ارفع <code>mahwous_character.png</code> ← Character Reference ← نشاط 80%<br>
+        3️⃣ ارفع صورة الزجاجة الأصلية ← Product Reference ← نشاط 90%<br>
+        4️⃣ الصق DNA الشخصية كاملاً من قسم الشخصية والسيناريو<br>
+        5️⃣ أضف: STRICTLY maintain character and product consistency<br><br>
+        <strong style='color:#F0CC55;'>في الاستديو:</strong><br>
+        ارفع mahwous_character.png في خانة "صورة مرجعية لمهووس" — سيُدمج تلقائياً
+        </div>
+        """, unsafe_allow_html=True)
 
     with st.expander("🔗 إعداد Make.com للنشر التلقائي"):
         st.markdown("""
-        1. افتح [make.com](https://make.com) → أنشئ Scenario جديداً
-        2. Trigger: **Webhook** (Custom) → انسخ الـ URL
-        3. أضف وحدات النشر: Telegram · Instagram · TikTok
-        4. ألصق الـ URL في Secrets كـ `WEBHOOK_PUBLISH_CONTENT`
-        5. شغّل الـ Scenario (ON)
-        6. في الاستديو: فعّل "نشر تلقائي (Make.com)"
-        """)
+        <div style='color:#C0A070; font-size:0.88rem; line-height:2;'>
+        1️⃣ افتح make.com ← أنشئ سيناريو جديداً<br>
+        2️⃣ Trigger: Webhook (Custom) ← انسخ الرابط<br>
+        3️⃣ أضف وحدات النشر: تيليجرام · إنستجرام · تيك توك<br>
+        4️⃣ ألصق الرابط في Secrets كـ WEBHOOK_PUBLISH_CONTENT<br>
+        5️⃣ فعّل السيناريو (ON)<br>
+        6️⃣ في الاستديو: فعّل "نشر تلقائي"
+        </div>
+        """, unsafe_allow_html=True)
 
-    with st.expander("💡 10 نصائح لأعلى جودة"):
+    with st.expander("💡 10 نصائح للحصول على أعلى جودة"):
         tips = [
-            "ارفع صورة العطر بخلفية نظيفة (بيضاء أو شفافة) لتحليل أدق",
-            "استخدم دائماً البدلة للمحتوى الرسمي والفاخر",
-            "الهودي هو الأنسب لـ TikTok والمحتوى الشبابي",
-            "السيناريو 'الحوار' هو الأعلى أداءً على TikTok وInstagram",
-            "اختر 3-4 منصات فقط في كل جلسة للسرعة والجودة",
-            "ارفع صورة مهووس المرجعية في بداية كل جلسة",
-            "مشهد 'متجر العطور' يُنتج أفضل نتائج للبدلة",
-            "مشهد 'الشاطئ' مثالي للكاجوال وعطور الصيف",
-            "استخدم 'إضافات خاصة' في مولّد البرومت للتخصيص",
-            "حمّل الصور بصيغة ZIP لحفظها منظمة",
+            ("📸", "ارفع صورة العطر بخلفية بيضاء أو شفافة لتحليل أدق"),
+            ("🤵", "استخدم البدلة للمحتوى الرسمي والفاخر دائماً"),
+            ("🏆", "الهودي هو الأنسب لـ TikTok والمحتوى الشبابي الديناميكي"),
+            ("💬", "سيناريو الحوار هو الأعلى أداءً على TikTok وإنستجرام"),
+            ("📱", "اختر 3-4 منصات فقط في كل جلسة للسرعة والجودة"),
+            ("👤", "ارفع صورة مهووس المرجعية في بداية كل جلسة"),
+            ("🏪", "مشهد متجر العطور يُنتج أفضل نتائج مع البدلة"),
+            ("🌅", "مشهد الشاطئ مثالي للكاجوال وعطور الصيف"),
+            ("✏️", "استخدم حقل الإضافات الخاصة في مولّد البرومت"),
+            ("📦", "حمّل الصور بصيغة ZIP لحفظها منظمة ومصنّفة"),
         ]
-        for i, tip in enumerate(tips, 1):
-            st.markdown(f"**{i}.** {tip}")
+        for i, (icon, tip) in enumerate(tips, 1):
+            st.markdown(f"""
+            <div style='display:flex; align-items:flex-start; gap:0.6rem; 
+                 background:rgba(212,175,55,0.04); border-radius:0.5rem;
+                 padding:0.6rem 0.8rem; margin-bottom:0.35rem;'>
+              <span style='font-size:1.1rem;'>{icon}</span>
+              <span style='color:#C0A870; font-size:0.85rem; line-height:1.5;'>
+                <strong style='color:#F0CC55;'>{i}.</strong> {tip}
+              </span>
+            </div>""", unsafe_allow_html=True)
