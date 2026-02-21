@@ -24,105 +24,118 @@ from modules.ai_engine import (
 STUDIO_CSS = """
 <style>
 .studio-hero {
-    background: linear-gradient(135deg, #0A0600 0%, #1A0E00 50%, #0A0600 100%);
-    border: 1px solid rgba(212,175,55,0.45);
-    border-radius: 1.25rem; padding: 2.5rem; text-align: center;
+    background: linear-gradient(135deg, #0F0900 0%, #201200 50%, #0F0900 100%);
+    border: 1px solid rgba(212,175,55,0.50);
+    border-radius: 1.3rem; padding: 2.8rem 2rem; text-align: center;
     margin-bottom: 2rem; position: relative; overflow: hidden;
 }
 .studio-hero::before {
     content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 55% at 50% 40%, rgba(212,175,55,0.09) 0%, transparent 70%);
+    background: radial-gradient(ellipse 80% 55% at 50% 40%, rgba(212,175,55,0.12) 0%, transparent 70%);
     pointer-events: none;
 }
-.studio-hero h1 { color: #D4AF37; font-size: 2.3rem; margin: 0; position: relative; letter-spacing: -0.01em; }
-.studio-hero .sub { color: #806040; margin: 0.4rem 0 0; font-size: 0.88rem; position: relative; }
+.studio-hero h1 { color: #F0CC55; font-size: 2.4rem; margin: 0; position: relative; letter-spacing: -0.01em; }
+.studio-hero .sub { color: #A08060; margin: 0.5rem 0 0; font-size: 0.92rem; position: relative; }
 .studio-hero .version-badge {
-    display: inline-block; background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3);
-    color: #D4AF37; padding: 0.2rem 0.8rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700;
-    letter-spacing: 0.08rem; margin-top: 0.6rem; position: relative;
+    display: inline-block; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.40);
+    color: #F0CC55; padding: 0.25rem 1rem; border-radius: 999px; font-size: 0.72rem; font-weight: 800;
+    letter-spacing: 0.08rem; margin-top: 0.8rem; position: relative;
 }
 
 .mode-card {
-    background: #0D0800; border: 2px solid rgba(212,175,55,0.2);
-    border-radius: 1rem; padding: 1.5rem; text-align: center; cursor: pointer;
+    background: #130D04; border: 2px solid rgba(212,175,55,0.25);
+    border-radius: 1rem; padding: 1.6rem; text-align: center; cursor: pointer;
     transition: all 0.25s; position: relative; overflow: hidden;
 }
 .mode-card:hover, .mode-card.active {
-    border-color: #D4AF37; background: rgba(212,175,55,0.06);
-    box-shadow: 0 0 20px rgba(212,175,55,0.12);
+    border-color: #F0CC55; background: rgba(212,175,55,0.08);
+    box-shadow: 0 0 24px rgba(212,175,55,0.15);
 }
-.mode-card .icon { font-size: 2.2rem; display: block; margin-bottom: 0.6rem; }
-.mode-card .title { color: #D4AF37; font-size: 1rem; font-weight: 800; }
-.mode-card .desc { color: #706040; font-size: 0.78rem; margin-top: 0.3rem; line-height: 1.4; }
+.mode-card .icon { font-size: 2.4rem; display: block; margin-bottom: 0.6rem; }
+.mode-card .title { color: #F0CC55; font-size: 1.05rem; font-weight: 900; }
+.mode-card .desc { color: #906840; font-size: 0.8rem; margin-top: 0.35rem; line-height: 1.5; }
 
 .analysis-card {
-    background: linear-gradient(135deg, #080500, #110900);
-    border: 1px solid rgba(212,175,55,0.3); border-radius: 1rem; padding: 1.25rem;
+    background: linear-gradient(135deg, #100800, #1A0E04);
+    border: 1px solid rgba(212,175,55,0.35); border-radius: 1rem; padding: 1.4rem;
 }
-.analysis-card .brand { color: #D4AF37; font-size: 1.4rem; font-weight: 900; }
-.analysis-card .name { color: #F0E0C0; font-size: 1rem; font-weight: 700; }
+.analysis-card .brand { color: #F0CC55; font-size: 1.5rem; font-weight: 900; }
+.analysis-card .name { color: #F0E0C0; font-size: 1.05rem; font-weight: 700; }
 .analysis-card .tag {
-    display: inline-block; background: rgba(212,175,55,0.1);
-    border: 1px solid rgba(212,175,55,0.25); color: #C8A030;
-    padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.72rem; margin: 0.15rem;
+    display: inline-block; background: rgba(212,175,55,0.12);
+    border: 1px solid rgba(212,175,55,0.30); color: #DDB840;
+    padding: 0.18rem 0.6rem; border-radius: 999px; font-size: 0.75rem; margin: 0.15rem;
+    font-weight: 700;
 }
 .analysis-card .color-dot {
-    display: inline-block; width: 14px; height: 14px; border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.2); margin: 0 0.2rem; vertical-align: middle;
+    display: inline-block; width: 16px; height: 16px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.25); margin: 0 0.2rem; vertical-align: middle;
 }
 
 .result-section {
-    background: #080500; border: 1px solid rgba(212,175,55,0.18);
-    border-radius: 1rem; padding: 1.5rem; margin-bottom: 1rem;
+    background: #100A04; border: 1px solid rgba(212,175,55,0.22);
+    border-radius: 1rem; padding: 1.6rem; margin-bottom: 1rem;
 }
-.result-section h3 { color: #D4AF37; font-size: 1.05rem; margin: 0 0 1rem; font-weight: 800; }
+.result-section h3 { color: #F0CC55; font-size: 1.08rem; margin: 0 0 1rem; font-weight: 900; }
 
 .caption-block {
-    background: #050300; border: 1px solid rgba(212,175,55,0.15);
-    border-radius: 0.75rem; padding: 0.9rem; margin-bottom: 0.6rem;
+    background: #0A0600; border: 1px solid rgba(212,175,55,0.18);
+    border-radius: 0.8rem; padding: 1rem; margin-bottom: 0.65rem;
 }
 .caption-header {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 0.5rem;
 }
-.caption-title { color: #D4AF37; font-size: 0.85rem; font-weight: 700; }
+.caption-title { color: #F0CC55; font-size: 0.88rem; font-weight: 800; }
 
 .hashtag-pill {
-    display: inline-block; background: rgba(212,175,55,0.08);
-    border: 1px solid rgba(212,175,55,0.2); color: #B89030;
-    padding: 0.2rem 0.55rem; border-radius: 999px; font-size: 0.72rem; margin: 0.15rem;
+    display: inline-block; background: rgba(212,175,55,0.10);
+    border: 1px solid rgba(212,175,55,0.25); color: #C8A040;
+    padding: 0.22rem 0.6rem; border-radius: 999px; font-size: 0.74rem; margin: 0.18rem;
+    font-weight: 700;
 }
 
 .scene-card {
-    background: #060400; border-right: 3px solid #D4AF37;
-    border-radius: 0.5rem; padding: 0.9rem; margin-bottom: 0.65rem;
+    background: #0A0700; border-right: 3px solid #D4AF37;
+    border-radius: 0.6rem; padding: 1rem; margin-bottom: 0.7rem;
 }
 .scene-num {
     display: inline-flex; align-items: center; justify-content: center;
-    background: #D4AF37; color: #000; width: 1.6rem; height: 1.6rem;
-    border-radius: 50%; font-weight: 900; font-size: 0.78rem; margin-left: 0.4rem;
+    background: #D4AF37; color: #000; width: 1.8rem; height: 1.8rem;
+    border-radius: 50%; font-weight: 900; font-size: 0.82rem; margin-left: 0.5rem;
     flex-shrink: 0;
 }
 
 .step-badge {
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3);
-    color: #D4AF37; padding: 0.3rem 0.9rem; border-radius: 999px;
-    font-size: 0.78rem; font-weight: 800; margin-bottom: 0.5rem;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(212,175,55,0.15); border: 1.5px solid rgba(212,175,55,0.40);
+    color: #F0CC55; padding: 0.35rem 1rem; border-radius: 999px;
+    font-size: 0.85rem; font-weight: 900; margin-bottom: 0.8rem;
+    letter-spacing: 0.02rem;
 }
 
 .flow-prompt {
-    background: #030200; border: 1px solid rgba(100,200,80,0.25);
-    border-radius: 0.5rem; padding: 0.75rem; margin-top: 0.5rem;
-    font-family: 'Courier New', monospace; font-size: 0.73rem;
-    color: #90C860; line-height: 1.7; direction: ltr; text-align: left;
+    background: #030200; border: 1px solid rgba(100,200,80,0.30);
+    border-radius: 0.55rem; padding: 0.8rem; margin-top: 0.5rem;
+    font-family: 'Courier New', monospace; font-size: 0.74rem;
+    color: #90D860; line-height: 1.7; direction: ltr; text-align: left;
     white-space: pre-wrap; max-height: 200px; overflow-y: auto;
 }
 
 .warning-box {
-    background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.25);
-    border-radius: 0.6rem; padding: 0.75rem; margin-bottom: 0.5rem;
-    color: #D4AF37; font-size: 0.82rem;
+    background: rgba(251,191,36,0.08); border: 1.5px solid rgba(251,191,36,0.35);
+    border-radius: 0.7rem; padding: 0.85rem; margin-bottom: 0.6rem;
+    color: #FFD060; font-size: 0.85rem; font-weight: 600;
+}
+
+.service-card {
+    background: #130D04; border: 1.5px solid rgba(212,175,55,0.20);
+    border-radius: 0.8rem; padding: 1rem; margin-bottom: 0.5rem;
+    transition: all 0.2s;
+}
+.service-card:hover {
+    border-color: rgba(212,175,55,0.45);
+    background: rgba(212,175,55,0.06);
 }
 
 @keyframes shimmer {
@@ -130,7 +143,7 @@ STUDIO_CSS = """
     100% { background-position: 200% 0; }
 }
 .loading-bar {
-    background: linear-gradient(90deg, #1A0A00 25%, #3A2000 50%, #1A0A00 75%);
+    background: linear-gradient(90deg, #1E1004 25%, #4A2800 50%, #1E1004 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
     border-radius: 0.3rem; height: 4px; margin: 0.5rem 0;
@@ -232,10 +245,10 @@ def platform_selector() -> list:
         st.session_state.selected_platforms = ["instagram_post", "instagram_story", "tiktok", "twitter"]
 
     groups = {
-        "📱 عمودي (9:16)": ["instagram_story", "tiktok", "youtube_short", "snapchat"],
-        "🖼️ مربع (1:1)":   ["instagram_post"],
-        "🖥️ أفقي (16:9)":  ["twitter", "youtube_thumb", "facebook", "linkedin"],
-        "📌 آخرى (2:3)":   ["pinterest"],
+        "📱 عمودي 9:16 — قصص وريلز": ["instagram_story", "tiktok", "youtube_short", "snapchat"],
+        "🖼️ مربع 1:1 — منشور إنستجرام": ["instagram_post"],
+        "🖥️ أفقي 16:9 — يوتيوب وتويتر": ["twitter", "youtube_thumb", "facebook", "linkedin"],
+        "📌 رأسي 2:3 — بينتريست":   ["pinterest"],
     }
 
     c1, c2, c3 = st.columns([1, 1, 2])
@@ -457,25 +470,125 @@ def _show_how_it_works():
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""
     <div style='text-align:center; margin-bottom:1.5rem;'>
-        <span style='color:#D4AF37; font-size:0.9rem; font-weight:700;'>🚀 كيف يعمل الاستديو؟</span>
+        <span style='color:#F0CC55; font-size:0.95rem; font-weight:900; letter-spacing:0.02rem;'>
+            🚀 كيف يعمل الاستديو في 5 خطوات؟
+        </span>
     </div>""", unsafe_allow_html=True)
     steps = [
-        ("📸", "ارفع صورة العطر", "أو أدخل البيانات يدوياً"),
-        ("🔍", "تحليل ذكي فوري", "Gemini 2.0 يقرأ كل التفاصيل"),
-        ("🎨", "توليد صور لكل منصة", "Imagen 3 بأعلى جودة"),
-        ("✍️", "Captions + سيناريو", "Claude 3.5 يكتب بالخليجي"),
-        ("🚀", "تحميل أو نشر", "ZIP كامل أو Make.com تلقائياً"),
+        ("📸", "ارفع صورة العطر", "أو أدخل البيانات يدوياً بدون صورة"),
+        ("🔍", "تحليل ذكي فوري", "Gemini 2.0 يقرأ كل تفاصيل العطر"),
+        ("🎨", "صور لكل منصة", "Imagen 3 بأعلى دقة ووضوح"),
+        ("✍️", "نصوص + سيناريو", "كلود 3.5 يكتب بأسلوب خليجي فاخر"),
+        ("🚀", "تحميل أو نشر", "ZIP كامل أو نشر تلقائي عبر Make.com"),
     ]
     cols = st.columns(5)
-    for col, (icon, title, sub) in zip(cols, steps):
+    for i, (col, (icon, title, sub)) in enumerate(zip(cols, steps)):
         col.markdown(f"""
-        <div style='text-align:center; padding:1rem 0.5rem; background:rgba(212,175,55,0.04);
-             border:1px solid rgba(212,175,55,0.12); border-radius:0.75rem;'>
-          <div style='font-size:1.8rem; margin-bottom:0.4rem;'>{icon}</div>
-          <div style='color:#D4AF37; font-size:0.8rem; font-weight:800; line-height:1.3;'>{title}</div>
-          <div style='color:#504030; font-size:0.68rem; margin-top:0.2rem; line-height:1.3;'>{sub}</div>
+        <div style='text-align:center; padding:1.1rem 0.5rem; 
+             background:linear-gradient(135deg,rgba(212,175,55,0.06),rgba(212,175,55,0.03));
+             border:1px solid rgba(212,175,55,0.15); border-radius:0.85rem; position:relative;'>
+          <div style='font-size:2rem; margin-bottom:0.5rem;'>{icon}</div>
+          <div style='color:#F0CC55; font-size:0.82rem; font-weight:900; line-height:1.4;'>{title}</div>
+          <div style='color:#806050; font-size:0.7rem; margin-top:0.25rem; line-height:1.4;'>{sub}</div>
+          <div style='position:absolute; top:-10px; right:50%; transform:translateX(50%);
+               background:#D4AF37; color:#000; width:1.4rem; height:1.4rem;
+               border-radius:50%; display:flex; align-items:center; justify-content:center;
+               font-weight:900; font-size:0.7rem;'>{i+1}</div>
         </div>""", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
+
+
+def _generate_weekly_plan(info: dict) -> str:
+    """توليد خطة نشر أسبوعية"""
+    from modules.ai_engine import _openrouter_chat, _get_secrets
+    secrets = _get_secrets()
+    brand = info.get("brand", "العطر")
+    name  = info.get("product_name", "")
+    mood  = info.get("mood", "فاخر")
+    prompt = f"""أنت خبير تسويق رقمي لعطور فاخرة. ضع خطة نشر أسبوعية (7 أيام) لعطر "{name}" من "{brand}" ذو طابع {mood}.
+لكل يوم: المنصة + نوع المحتوى + التوقيت + الهدف + نبذة عن المحتوى.
+اكتب بالعربية باختصار ووضوح. نسّق كجدول نصي جميل."""
+    try:
+        return _openrouter_chat(prompt, secrets["openrouter"])
+    except:
+        return f"""📅 خطة النشر الأسبوعية — {brand} {name}
+
+الأحد    | إنستجرام ريلز  | 7م  | توعية  | فيديو تقديمي للعطر بموسيقى هادئة
+الاثنين  | تيك توك        | 6م  | تفاعل  | سيناريو الحوار مع العطر
+الثلاثاء | تويتر/X        | 12م | محتوى  | تغريدة عن الملاحظات العطرية
+الأربعاء | يوتيوب شورت    | 5م  | تعليم  | فيديو: كيف تختار عطرك المثالي
+الخميس   | إنستجرام ستوري | 8م  | قصة    | خلف الكواليس — عالم مهووس
+الجمعة   | تيليجرام       | 2م  | عروض   | عرض خاص نهاية الأسبوع
+السبت    | فيسبوك         | 4م  | مجتمع  | استطلاع: ما عطرك المفضل؟"""
+
+
+def _generate_email_copy(info: dict) -> str:
+    """توليد بريد إلكتروني تسويقي"""
+    from modules.ai_engine import _openrouter_chat, _get_secrets
+    secrets = _get_secrets()
+    brand = info.get("brand", "مهووس")
+    name  = info.get("product_name", "العطر")
+    mood  = info.get("mood", "فاخر وأنيق")
+    prompt = f"""اكتب بريداً إلكترونياً تسويقياً فاخراً لعطر "{name}" من "{brand}".
+المزاج: {mood}. الجمهور: محبّو العطور الفاخرة في الخليج.
+اشمل: سطر الموضوع + جسم الرسالة + دعوة للعمل.
+الأسلوب: راقٍ وعاطفي ومقنع. باللغة العربية الفصحى الجذابة."""
+    try:
+        return _openrouter_chat(prompt, secrets["openrouter"])
+    except:
+        return f"""📧 البريد الإلكتروني التسويقي
+
+الموضوع: رحلة عطرية لا تُنسى — {name} من {brand} 🌹
+
+عزيزي محبّ الرقي،
+
+بين طيّات الهواء يسكن سرٌّ عطريٌّ يستحق أن تعيشه...
+{name} من {brand} — ليس مجرد عطر، بل تجربة تحمل بصمتك الخاصة.
+
+✨ ملاحظات {info.get('notes_guess', 'فاخرة ومميزة')}
+✨ طابع {mood}
+✨ يدوم طويلاً ويترك أثراً لا يُنسى
+
+اكتشف عطرك الآن ←
+
+مع تحيات فريق مهووس للعطور 🌹"""
+
+
+def _generate_ad_copy(info: dict) -> str:
+    """توليد نص إعلان مدفوع"""
+    from modules.ai_engine import _openrouter_chat, _get_secrets
+    secrets = _get_secrets()
+    brand = info.get("brand", "مهووس")
+    name  = info.get("product_name", "العطر")
+    gender = {"masculine":"للرجل","feminine":"للمرأة","unisex":"للجنسين"}.get(info.get("gender","unisex"),"للجميع")
+    prompt = f"""اكتب نص إعلان مدفوع متكامل لعطر "{name}" من "{brand}" {gender}.
+اشمل:
+1. هيدلاين قوي (أقل من 10 كلمات)
+2. نص إعلان Meta/Instagram (125 حرف)
+3. نص إعلان TikTok (بداية مشوّقة 3 ثوانٍ)
+4. دعوة للعمل CTA واضحة
+5. نص إعلان Google (العنوان + الوصف)
+باللغة العربية، أسلوب تسويقي مقنع وعاطفي."""
+    try:
+        return _openrouter_chat(prompt, secrets["openrouter"])
+    except:
+        return f"""📣 نصوص الإعلانات المدفوعة — {name}
+
+━━ هيدلاين الحملة ━━
+"عطرٌ واحد يكفي ليُعرَف بك في كل مكان"
+
+━━ إعلان Meta / Instagram ━━
+{name} من {brand} — العطر الذي يتركك حاضراً حتى بعد رحيلك. اطلب الآن ✨
+
+━━ بداية إعلان TikTok ━━
+"توقف لثانية... هل تعرف الفرق بين عطر عادي وعطر يغيّر يومك؟" 🌹
+
+━━ دعوة للعمل CTA ━━
+🛒 اطلب الآن واستلم في 24 ساعة | شحن مجاني
+
+━━ إعلان Google ━━
+العنوان: {name} | {brand} الرسمي
+الوصف: اكتشف عطرك المثالي من مجموعة {brand} الفاخرة. جودة أصيلة وتوصيل سريع."""
 
 
 # ─── Main Studio Page ──────────────────────────────────────────────────────────
@@ -485,8 +598,8 @@ def show_studio_page():
     st.markdown("""
     <div class="studio-hero">
       <h1>🎬 استديو مهووس الذكي</h1>
-      <p class="sub">توليد صور · فيديو · Captions · سيناريوهات · هاشتاقات لجميع المنصات</p>
-      <div class="version-badge">v11.0 · POWERED BY GEMINI 2.0 + CLAUDE 3.5</div>
+      <p class="sub">توليد صور · فيديو · تعليقات · سيناريوهات · هاشتاقات · خطط نشر لجميع المنصات</p>
+      <div class="version-badge">v12.0 · GEMINI 2.0 + CLAUDE 3.5 + IMAGEN 3</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -643,8 +756,10 @@ def show_studio_page():
         outfit_choice = st.selectbox(
             "👔 زي مهووس",
             options=list(MAHWOUS_OUTFITS.keys()),
-            format_func=lambda k: {"suit":"🤵 البدلة الفاخرة","hoodie":"🏆 الهودي الأيقوني",
-                                    "thobe":"👘 الثوب الملكي","casual":"👕 الكاجوال"}[k],
+            format_func=lambda k: {"suit":"🤵 البدلة الفاخرة — للمحتوى الرسمي",
+                                    "hoodie":"🏆 الهودي — لتيك توك والشباب",
+                                    "thobe":"👘 الثوب الملكي — للطابع الخليجي",
+                                    "casual":"👕 الكاجوال — للمحتوى العاطفي"}[k],
             key="outfit_sel"
         )
         include_char = st.toggle("🧑 تضمين شخصية مهووس في الصور", value=True)
@@ -654,9 +769,12 @@ def show_studio_page():
         scene_choice = st.selectbox(
             "🎭 مكان المشهد",
             options=["store","beach","desert","studio","garden","rooftop","car"],
-            format_func=lambda k: {"store":"🏪 متجر العطور","beach":"🌅 شاطئ غروب",
-                                    "desert":"🏜️ صحراء ذهبية","studio":"🎬 استديو فاخر",
-                                    "garden":"🌹 حديقة ملكية","rooftop":"🌆 سطح ناطحة",
+            format_func=lambda k: {"store":"🏪 متجر العطور الفاخر",
+                                    "beach":"🌅 شاطئ عند الغروب",
+                                    "desert":"🏜️ صحراء ذهبية",
+                                    "studio":"🎬 استديو تصوير فاخر",
+                                    "garden":"🌹 حديقة ملكية",
+                                    "rooftop":"🌆 سطح مبنى عالٍ",
                                     "car":"🚗 سيارة فارهة"}[k],
             key="scene_sel"
         )
@@ -668,24 +786,47 @@ def show_studio_page():
     st.markdown("---")
     st.markdown('<div class="step-badge">⑤ اختر المحتوى المطلوب</div>', unsafe_allow_html=True)
 
+    st.markdown("""
+    <div style='background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.15);
+         border-radius:0.75rem; padding:1rem 1.2rem; margin-bottom:1rem;'>
+      <div style='color:#F0CC55; font-size:0.88rem; font-weight:900; margin-bottom:0.6rem;'>🎯 المحتوى البصري</div>
+    </div>
+    """, unsafe_allow_html=True)
+
     oc1, oc2, oc3 = st.columns(3)
     with oc1:
-        opt_images   = st.checkbox("🖼️ توليد صور لكل منصة", value=True,
-                                    help="يتطلب GEMINI_API_KEY" if not has_gemini else "")
-        opt_captions = st.checkbox("📝 Captions لكل منصة", value=True)
-        opt_story    = st.checkbox("📖 قصة عطرية إبداعية", value=False)
-    with oc2:
-        opt_desc     = st.checkbox("📄 5 أوصاف تسويقية", value=True)
-        opt_hashtags = st.checkbox("🏷️ 45 هاشتاق", value=True)
-        opt_publish  = st.checkbox("🚀 نشر تلقائي (Make.com)", value=False,
-                                    help="يتطلب WEBHOOK_PUBLISH_CONTENT")
-    with oc3:
-        opt_scenario = st.checkbox("🎬 سيناريو فيديو TikTok", value=False)
-        opt_video    = st.checkbox("🎥 توليد فيديو (Luma AI)", value=False,
+        opt_images   = st.checkbox("🖼️ صور لكل منصة", value=True,
+                                    help="يتطلب GEMINI_API_KEY" if not has_gemini else "Imagen 3.0 — أعلى جودة")
+        opt_scenario = st.checkbox("🎬 سيناريو فيديو تيك توك", value=False)
+        opt_video    = st.checkbox("🎥 فيديو Luma AI", value=False,
                                     help="يتطلب LUMA_API_KEY")
+    with oc2:
+        opt_captions = st.checkbox("📝 تعليقات جميع المنصات (12)", value=True)
+        opt_desc     = st.checkbox("📄 5 أوصاف تسويقية", value=True)
+        opt_story    = st.checkbox("📖 قصة عطرية إبداعية", value=False)
+    with oc3:
+        opt_hashtags = st.checkbox("🏷️ 45 هاشتاق (عربي + إنجليزي)", value=True)
+        opt_weekly   = st.checkbox("📅 خطة نشر أسبوعية", value=False,
+                                    help="جدول محتوى 7 أيام لكل المنصات")
+        opt_email    = st.checkbox("📧 نص بريد إلكتروني تسويقي", value=False)
+
+    st.markdown("""
+    <div style='background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.15);
+         border-radius:0.75rem; padding:0.7rem 1.2rem; margin:0.8rem 0 0.5rem;'>
+      <div style='color:#F0CC55; font-size:0.88rem; font-weight:900;'>⚙️ النشر والمتابعة</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    pub1, pub2 = st.columns(2)
+    with pub1:
+        opt_publish  = st.checkbox("🚀 نشر تلقائي عبر Make.com", value=False,
+                                    help="يتطلب WEBHOOK_PUBLISH_CONTENT")
+    with pub2:
+        opt_ad_copy  = st.checkbox("📣 نص إعلان مدفوع (Meta/TikTok)", value=False,
+                                    help="نص إعلاني جاهز للحملات المدفوعة")
 
     if opt_scenario:
-        scenario_type = st.selectbox("نوع السيناريو", [
+        scenario_type = st.selectbox("🎬 نوع السيناريو", [
             "dialogue", "story", "challenge", "review", "unboxing"
         ], format_func=lambda k: {
             "dialogue": "💬 حوار مهووس والعطر",
@@ -705,16 +846,19 @@ def show_studio_page():
 
     if not btn_disabled:
         tasks = []
-        if opt_images and has_gemini:  tasks.append(f"صور ({num_selected} منصة)")
-        if opt_captions:               tasks.append("Captions (12 منصة)")
+        if opt_images and has_gemini:  tasks.append(f"صور ({num_selected})")
+        if opt_captions:               tasks.append("تعليقات (12 منصة)")
         if opt_desc:                   tasks.append("5 أوصاف")
         if opt_hashtags:               tasks.append("45 هاشتاق")
-        if opt_scenario:               tasks.append("سيناريو TikTok")
-        if opt_story:                  tasks.append("قصة إبداعية")
-        if opt_video:                  tasks.append("فيديو Luma")
+        if opt_scenario:               tasks.append("سيناريو")
+        if opt_story:                  tasks.append("قصة")
+        if opt_weekly:                 tasks.append("خطة أسبوعية")
+        if opt_email:                  tasks.append("بريد تسويقي")
+        if opt_ad_copy:                tasks.append("إعلان مدفوع")
+        if opt_video:                  tasks.append("فيديو")
         btn_label = f"⚡ ابدأ التوليد — {' · '.join(tasks)}"
     else:
-        btn_label = "⚠️ اختر منصة واحدة على الأقل"
+        btn_label = "⚠️ اختر منصة واحدة على الأقل لبدء التوليد"
 
     if st.button(btn_label, type="primary", use_container_width=True, disabled=btn_disabled):
         all_results = {}
@@ -723,7 +867,8 @@ def show_studio_page():
 
         total_steps = sum([
             bool(opt_captions), bool(opt_desc), bool(opt_hashtags),
-            bool(opt_scenario), bool(opt_story),
+            bool(opt_scenario), bool(opt_story), bool(opt_weekly),
+            bool(opt_email), bool(opt_ad_copy),
             bool(opt_images and has_gemini),
             bool(opt_video), bool(opt_publish)
         ])
@@ -738,11 +883,11 @@ def show_studio_page():
 
         # === Captions ===
         if opt_captions:
-            advance("📝 توليد Captions لـ 12 منصة...")
+            advance("📝 توليد تعليقات لـ 12 منصة...")
             try:
                 all_results["captions"] = generate_all_captions(perfume_info)
             except Exception as e:
-                st.warning(f"⚠️ Captions: {e}")
+                st.warning(f"⚠️ تعليقات: {e}")
 
         # === Descriptions ===
         if opt_desc:
@@ -754,7 +899,7 @@ def show_studio_page():
 
         # === Hashtags ===
         if opt_hashtags:
-            advance("🏷️ توليد 45 هاشتاق محسوب...")
+            advance("🏷️ توليد 45 هاشتاق...")
             try:
                 all_results["hashtags"] = generate_hashtags(perfume_info)
             except Exception as e:
@@ -775,6 +920,30 @@ def show_studio_page():
                 all_results["story"] = generate_perfume_story(perfume_info)
             except Exception as e:
                 st.warning(f"⚠️ قصة: {e}")
+
+        # === Weekly Content Plan ===
+        if opt_weekly:
+            advance("📅 توليد خطة النشر الأسبوعية...")
+            try:
+                all_results["weekly_plan"] = _generate_weekly_plan(perfume_info)
+            except Exception as e:
+                st.warning(f"⚠️ خطة أسبوعية: {e}")
+
+        # === Email Marketing ===
+        if opt_email:
+            advance("📧 كتابة البريد الإلكتروني التسويقي...")
+            try:
+                all_results["email"] = _generate_email_copy(perfume_info)
+            except Exception as e:
+                st.warning(f"⚠️ بريد إلكتروني: {e}")
+
+        # === Paid Ad Copy ===
+        if opt_ad_copy:
+            advance("📣 كتابة نص الإعلان المدفوع...")
+            try:
+                all_results["ad_copy"] = _generate_ad_copy(perfume_info)
+            except Exception as e:
+                st.warning(f"⚠️ إعلان مدفوع: {e}")
 
         # === Images ===
         if opt_images and has_gemini and selected_platforms:
@@ -807,18 +976,21 @@ def show_studio_page():
             advance("📡 إرسال إلى Make.com...")
             payload = {
                 **perfume_info,
-                "captions":   all_results.get("captions", {}),
+                "captions":    all_results.get("captions", {}),
                 "descriptions": all_results.get("descriptions", {}),
-                "hashtags":   all_results.get("hashtags", {}),
-                "video_url":  all_results.get("video", {}).get("url", ""),
-                "platforms":  selected_platforms,
-                "timestamp":  datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "source":     "mahwous_studio_v11"
+                "hashtags":    all_results.get("hashtags", {}),
+                "video_url":   all_results.get("video", {}).get("url", ""),
+                "weekly_plan": all_results.get("weekly_plan", ""),
+                "email":       all_results.get("email", ""),
+                "ad_copy":     all_results.get("ad_copy", ""),
+                "platforms":   selected_platforms,
+                "timestamp":   datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "source":      "mahwous_studio_v12"
             }
             if send_to_make(payload):
-                st.success("✅ تم الإرسال إلى Make.com!")
+                st.success("✅ تم الإرسال إلى Make.com بنجاح!")
             else:
-                st.warning("⚠️ فشل الإرسال — تحقق من WEBHOOK_PUBLISH_CONTENT")
+                st.warning("⚠️ فشل الإرسال — تحقق من WEBHOOK_PUBLISH_CONTENT في الإعدادات")
 
         progress_bar.progress(100)
         status_text.markdown("✅ **اكتمل التوليد بنجاح!**")
@@ -831,12 +1003,18 @@ def show_studio_page():
 def _display_all_results(results: dict, info: dict):
     """عرض كل النتائج"""
     st.markdown("---")
-    st.markdown("## 📦 نتائج التوليد")
+    st.markdown("""
+    <div style='background:linear-gradient(135deg,#130A00,#1E1004); border:1px solid rgba(212,175,55,0.35);
+         border-radius:1rem; padding:1.5rem; text-align:center; margin-bottom:1.5rem;'>
+      <div style='color:#F0CC55; font-size:1.4rem; font-weight:900;'>📦 نتائج التوليد</div>
+      <div style='color:#A08060; font-size:0.85rem; margin-top:0.3rem;'>جميع المحتويات جاهزة للتحميل والنشر</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Product summary
     with st.expander("🧴 ملخص بيانات العطر", expanded=False):
         _info_card(info)
-        with st.expander("JSON كامل"):
+        with st.expander("📋 البيانات الكاملة (JSON)"):
             st.json(info)
 
     # Images
@@ -856,15 +1034,36 @@ def _display_all_results(results: dict, info: dict):
 
     # Captions
     if "captions" in results:
-        with st.expander("📱 Captions جميع المنصات", expanded=True):
+        with st.expander("📱 تعليقات جميع المنصات", expanded=True):
             display_captions(results["captions"])
 
     # Creative Story
     if "story" in results and results["story"]:
         with st.expander("📖 القصة العطرية الإبداعية", expanded=False):
-            st.markdown(f"<div style='background:#060400; border:1px solid rgba(212,175,55,0.2); border-radius:0.75rem; padding:1.2rem; color:#E8D8B0; font-size:0.88rem; line-height:1.8; font-style:italic;'>{results['story']}</div>", unsafe_allow_html=True)
-            st.download_button("📄 تحميل القصة", results["story"],
+            st.markdown(f"<div style='background:#0A0600; border:1px solid rgba(212,175,55,0.25); border-radius:0.75rem; padding:1.4rem; color:#F0E0C0; font-size:0.9rem; line-height:1.9; font-style:italic;'>{results['story']}</div>", unsafe_allow_html=True)
+            st.download_button("📄 تحميل القصة (.txt)", results["story"],
                                file_name=f"story_{info.get('brand','brand')}.txt", mime="text/plain")
+
+    # Weekly Plan
+    if "weekly_plan" in results and results["weekly_plan"]:
+        with st.expander("📅 خطة النشر الأسبوعية", expanded=False):
+            st.markdown(f"<div style='background:#0A0600; border:1px solid rgba(212,175,55,0.25); border-radius:0.75rem; padding:1.4rem; color:#F0E0C0; font-size:0.85rem; line-height:1.9; direction:rtl;'>{results['weekly_plan'].replace(chr(10), '<br>')}</div>", unsafe_allow_html=True)
+            st.download_button("📅 تحميل الخطة (.txt)", results["weekly_plan"],
+                               file_name=f"weekly_plan_{info.get('brand','brand')}.txt", mime="text/plain")
+
+    # Email Copy
+    if "email" in results and results["email"]:
+        with st.expander("📧 البريد الإلكتروني التسويقي", expanded=False):
+            st.text_area("✉️ محتوى البريد الإلكتروني", results["email"], height=280, key="email_content")
+            st.download_button("📧 تحميل البريد (.txt)", results["email"],
+                               file_name=f"email_{info.get('brand','brand')}.txt", mime="text/plain")
+
+    # Ad Copy
+    if "ad_copy" in results and results["ad_copy"]:
+        with st.expander("📣 نصوص الإعلانات المدفوعة", expanded=False):
+            st.text_area("📣 نص الإعلان", results["ad_copy"], height=320, key="ad_copy_content")
+            st.download_button("📣 تحميل نص الإعلان (.txt)", results["ad_copy"],
+                               file_name=f"ad_copy_{info.get('brand','brand')}.txt", mime="text/plain")
 
     # Descriptions
     if "descriptions" in results and results["descriptions"]:
@@ -891,20 +1090,20 @@ def _display_all_results(results: dict, info: dict):
         with st.expander("🏷️ 45 هاشتاق", expanded=False):
             hc1, hc2, hc3 = st.columns(3)
             with hc1:
-                st.markdown("**🇸🇦 عربي (20)**")
+                st.markdown("<div style='color:#F0CC55; font-weight:900; font-size:0.88rem; margin-bottom:0.4rem;'>🇸🇦 عربي (20)</div>", unsafe_allow_html=True)
                 arabic_ht = " ".join(ht.get("arabic", []))
                 st.text_area("", arabic_ht, height=130, key="ht_ar")
             with hc2:
-                st.markdown("**🌍 إنجليزي (20)**")
+                st.markdown("<div style='color:#F0CC55; font-weight:900; font-size:0.88rem; margin-bottom:0.4rem;'>🌍 إنجليزي (20)</div>", unsafe_allow_html=True)
                 eng_ht = " ".join(ht.get("english", []))
                 st.text_area("", eng_ht, height=130, key="ht_en")
             with hc3:
-                st.markdown("**🔥 ترندينج (5)**")
+                st.markdown("<div style='color:#F0CC55; font-weight:900; font-size:0.88rem; margin-bottom:0.4rem;'>🔥 ترندينج (5)</div>", unsafe_allow_html=True)
                 tr_ht = " ".join(ht.get("trending", []))
                 st.text_area("", tr_ht, height=130, key="ht_tr")
 
             all_ht = f"{arabic_ht} {eng_ht} {tr_ht}"
-            st.download_button("📋 نسخ كل الهاشتاقات (.txt)", all_ht,
+            st.download_button("📋 تحميل كل الهاشتاقات (.txt)", all_ht,
                                file_name="hashtags.txt", mime="text/plain", use_container_width=True)
 
     # Download All JSON
@@ -912,17 +1111,20 @@ def _display_all_results(results: dict, info: dict):
     export = {
         "product":      info,
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "source":       "Mahwous AI Studio v11.0",
+        "source":       "Mahwous AI Studio v12.0",
         "captions":     results.get("captions", {}),
         "descriptions": results.get("descriptions", {}),
         "hashtags":     results.get("hashtags", {}),
         "scenario":     results.get("scenario", {}),
         "story":        results.get("story", ""),
+        "weekly_plan":  results.get("weekly_plan", ""),
+        "email":        results.get("email", ""),
+        "ad_copy":      results.get("ad_copy", ""),
         "video_url":    results.get("video", {}).get("url", ""),
     }
     brand_clean = info.get("brand", "brand").replace(" ", "_").lower()
     st.download_button(
-        "📥 تحميل كل المحتوى النصي (JSON)",
+        "📥 تحميل جميع المحتوى النصي (JSON)",
         json.dumps(export, ensure_ascii=False, indent=2),
         file_name=f"mahwous_{brand_clean}_{datetime.now().strftime('%Y%m%d_%H%M')}.json",
         mime="application/json",
